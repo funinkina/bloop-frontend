@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { DM_Sans } from "next/font/google";
 import Image from 'next/image';
+import { Analytics } from "@vercel/analytics/react"
 import "./globals.css";
 
 const dmSans = DM_Sans({
@@ -22,6 +23,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <Analytics />
       <body className={`${dmSans.className} flex flex-col min-h-screen`}>
         <div className="flex-grow">
           {children}
