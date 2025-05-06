@@ -4,7 +4,7 @@ interface BackendHealthResponse {
     ai_tasks_max: number;
     ai_tasks_queued: number;
     status: string;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export async function GET() {
@@ -21,7 +21,7 @@ export async function GET() {
             let errorData;
             try {
                 errorData = await response.json();
-            } catch (e) {
+            } catch {
                 errorData = { message: await response.text() };
             }
             console.error('Backend health check failed:', response.status, errorData);
