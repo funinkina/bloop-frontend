@@ -236,7 +236,7 @@ export default function HomePage() {
         <div className="mb-8 md:mb-10 w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl sm:mt-10 mt-4">
           <Image
             src="bloop_logo.svg"
-            alt="Your Company Logo"
+            alt="Bloop Logo"
             width={500}
             height={100}
             className="w-full h-auto"
@@ -248,7 +248,7 @@ export default function HomePage() {
         {/* Tagline */}
         <div className='w-full max-w-md md:max-w-2xl lg:max-w-3xl'>
           <p className="text-blue-950/90 text-3xl sm:text-4xl lg:text-5xl font-medium text-center mb-10 md:mb-16">
-            over-analyze <Image src="icons/smiley.svg" alt="Smiley" width={30} height={30} className="inline w-8 h-8 lg:w-10 lg:h-10" /> and nit-pick your <Image src="/icons/whatsapp.svg" alt="whatsapp icon" width={40} height={40} className="inline w-10 h-10 lg:w-12 lg:h-12" /> Whatsapp <Image src="/icons/Quote.svg" alt="Quote" width={30} height={30} className="inline w-8 h-8 lg:w-10 lg:h-10" /> chats with <Image src="/bloop_logo.svg" alt="Your Company Logo" width={100} height={33} className='inline mb-1 lg:mb-2 w-[100px] lg:w-[150px] h-auto'></Image>
+            over-analyze <Image src="icons/smiley.svg" alt="Smiley" width={30} height={30} className="inline w-8 h-8 lg:w-10 lg:h-10" /> and nit-pick your <Image src="/icons/whatsapp.svg" alt="whatsapp icon" width={40} height={40} className="inline w-10 h-10 lg:w-12 lg:h-12" /> Whatsapp <Image src="/icons/Quote.svg" alt="Quote" width={30} height={30} className="inline w-8 h-8 lg:w-10 lg:h-10" /> chats with <Image src="/bloop_logo.svg" alt="bloop logo" width={100} height={33} className='inline mb-1 lg:mb-2 w-[100px] lg:w-[150px] h-auto'></Image>
           </p>
         </div>
 

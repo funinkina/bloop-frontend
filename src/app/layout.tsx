@@ -60,7 +60,7 @@ export default function RootLayout({
           <div className="text-center md:text-right">
             <Image
               src="/Created_by.svg"
-              alt="Created by Funinkina"
+              alt="Created by"
               width={200}
               height={200}
               className="w-32 md:w-40 lg:w-48 h-auto mb-2 md:mb-4 mx-auto md:mx-0 md:ml-auto"
