@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Head from "next/head";
 import { DM_Sans } from "next/font/google";
 import Image from 'next/image';
 import { Analytics } from "@vercel/analytics/react"
@@ -23,6 +24,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <Head>
+        <link rel="icon" href="favicon.ico" />
+      </Head>
       <Analytics />
       <body className={`${dmSans.className} flex flex-col min-h-screen`}>
         <div className="flex-grow">
