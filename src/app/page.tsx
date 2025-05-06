@@ -21,19 +21,43 @@ export default function HomePage() {
         const data = await response.json();
 
         if (!response.ok) {
-          throw new Error(data.message || `Server status check failed with status: ${response.status}`);
+          throw new Error(data.message || `Server health check failed with status: ${response.status}`);
         }
 
-        if (data && data.status === 'ok' && typeof data.ai_tasks_max === 'number' && typeof data.ai_tasks_queued === 'number') {
-          if (data.ai_tasks_max === 0) {
-            setServerHealth({ status: 'ok', message: 'Server is alright (queue inactive).' });
-          } else if (data.ai_tasks_queued < data.ai_tasks_max / 4) {
-            setServerHealth({ status: 'ok', message: 'Server is alright.' });
+        if (
+          data &&
+          typeof data.ai_tasks_processing === 'number' &&
+          typeof data.ai_tasks_queued === 'number' &&
+          typeof data.ai_tasks_worker_capacity === 'number'
+        ) {
+          const { ai_tasks_processing, ai_tasks_queued, ai_tasks_worker_capacity, status: backendStatus } = data;
+
+          if (backendStatus !== 'ok') {
+            setServerHealth({ status: 'error', message: `Server status: ${backendStatus || 'unknown'}` });
+            return;
+          }
+
+          const totalActiveTasks = ai_tasks_processing + ai_tasks_queued;
+          const capacity = ai_tasks_worker_capacity;
+
+          if (capacity === 0) {
+            if (totalActiveTasks === 0) {
+              setServerHealth({ status: 'ok', message: 'Server is alright (queue inactive).' });
+            } else {
+              setServerHealth({ status: 'error', message: 'Server has tasks but no worker capacity.' });
+            }
           } else {
-            setServerHealth({ status: 'busy', message: 'Server might be busy.' });
+            const loadPercentage = totalActiveTasks / capacity;
+            if (loadPercentage < 0.5) {
+              setServerHealth({ status: 'ok', message: 'Server is alright.' });
+            } else if (loadPercentage < 0.8) {
+              setServerHealth({ status: 'busy', message: 'Server is experiencing moderate load.' });
+            } else {
+              setServerHealth({ status: 'busy', message: 'Server is under high load.' });
+            }
           }
         } else {
-          setServerHealth({ status: 'error', message: data.message || 'Server status: unexpected response.' });
+          setServerHealth({ status: 'error', message: data.message || 'Server status: unexpected response format.' });
         }
       } catch (err) {
         console.error("Failed to fetch server health:", err);
@@ -315,7 +339,7 @@ export default function HomePage() {
               disabled={isLoading || !file}
               className={`w-full px-4 py-2 text-blue-950 font-medium rounded-md outline-2 outline-neutral-800 focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 shadow-[5px_5px_0px_0px_rgba(0,0,0,0.85)]
                 ${isLoading || !file
-                  ? 'bg-amber-50 cursor-not-allowed opacity-70' // Added opacity
+                  ? 'bg-amber-50 cursor-not-allowed opacity-70'
                   : 'bg-amber-50 hover:shadow-[7px_7px_0px_0px_rgba(0,0,0,0.85)] hover:cursor-pointer'
                 } transition duration-150 ease-in-out flex items-center justify-center text-sm sm:text-base`}
             >

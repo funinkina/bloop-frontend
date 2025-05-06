@@ -1,8 +1,9 @@
 import { NextResponse } from 'next/server';
 
 interface BackendHealthResponse {
-    ai_tasks_max: number;
+    ai_tasks_processing: number;
     ai_tasks_queued: number;
+    ai_tasks_worker_capacity: number;
     status: string;
     [key: string]: unknown;
 }
