@@ -27,6 +27,7 @@ export default function RootLayout({
       <Head>
         <link rel="icon" href="favicon.ico" />
         <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5230987521071301" crossOrigin="anonymous"></script>
+        <meta name="google-adsense-account" content="ca-pub-5230987521071301"></meta>
       </Head>
       <Analytics />
       <body className={`${dmSans.className} flex flex-col min-h-screen`}>
