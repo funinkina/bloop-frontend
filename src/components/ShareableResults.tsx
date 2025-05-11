@@ -4,6 +4,7 @@ import { ResponsiveChord } from '@nivo/chord';
 import AIAnalysis from '@/components/AIAnalysis';
 import ChatStatistic from './ChatStatistics';
 import MonthlyActivity from '@/components/MonthlyActivity';
+import Image from 'next/image';
 
 interface Stats {
     total_messages: number;
@@ -24,7 +25,7 @@ interface Stats {
     common_emojis: { [emoji: string]: number };
     average_response_time_minutes: number;
     peak_hour: number | null;
-    user_monthly_activity: Array<{}>;
+    user_monthly_activity: object[];
     weekday_vs_weekend_avg: {
         average_weekday_messages: number;
         average_weekend_messages: number;
@@ -137,7 +138,7 @@ const ShareableResults = React.forwardRef<HTMLDivElement, ShareableResultsProps>
             >
                 {/* Branding */}
                 <div className="flex justify-center items-center mb-6 gap-4">
-                    <img src="/bloop_logo.svg" alt="Bloop Logo" className="h-12" />
+                    <Image src="/bloop_logo.svg" alt="Bloop Logo" width={48} height={48} className="h-12" />
                     <p className="text-lg font-semibold text-[#232F61] m-0">
                         generate your own at bloopit.vercel.app
                     </p>
@@ -165,7 +166,7 @@ const ShareableResults = React.forwardRef<HTMLDivElement, ShareableResultsProps>
                     <div className="p-4 border-[1.5px] border-gray-800 rounded-lg bg-gray-100 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.7)]">
                         <div className="flex items-center justify-between mb-3">
                             <h2 className="text-lg font-bold text-gray-800">Top {topWords.length} Words</h2>
-                            <img src="/icons/words.svg" alt="Common Words" className="w-7 h-7" />
+                            <Image src="/icons/words.svg" alt="Common Words" width={28} height={28} className="w-7 h-7" />
                         </div>
                         <div className="w-full flex flex-col items-start gap-2 pt-2">
                             {topWords.length > 0 ? topWords.map(({ text, value }, wordIndex) => {
@@ -194,7 +195,7 @@ const ShareableResults = React.forwardRef<HTMLDivElement, ShareableResultsProps>
                     <div className="p-4 border-[1.5px] border-gray-800 rounded-lg bg-gray-100 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.7)] flex flex-col">
                         <div className="flex items-center justify-between mb-3">
                             <h2 className="text-lg font-bold text-gray-800">Top Emojis</h2>
-                            <img src="/icons/lovely_face.svg" alt="Common Emojis" className="w-7 h-7" />
+                            <Image src="/icons/lovely_face.svg" alt="Common Emojis" width={28} height={28} className="w-7 h-7" />
                         </div>
                         <div className="flex-grow flex items-center justify-center">
                             {sortedEmojis.length > 0 ? (
@@ -213,7 +214,7 @@ const ShareableResults = React.forwardRef<HTMLDivElement, ShareableResultsProps>
                     <div className="p-4 border-[1.5px] border-gray-800 rounded-lg bg-purple-100 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.7)]">
                         <div className="flex items-center justify-between mb-3">
                             <h2 className="text-lg font-bold text-gray-800">AI Summary</h2>
-                            <img src="/icons/sparkle.svg" alt="AI Analysis" className="w-7 h-7" />
+                            <Image src="/icons/sparkle.svg" alt="AI Analysis" width={28} height={28} className="w-7 h-7" />
                         </div>
                         <AIAnalysis summary={results.ai_analysis?.summary || 'Summary not available.'} people={[]} summaryOnly={true} useSimpleStyles={true} />
                     </div>
@@ -223,7 +224,7 @@ const ShareableResults = React.forwardRef<HTMLDivElement, ShareableResultsProps>
                         <div className="p-4 border-[1.5px] border-gray-800 rounded-lg bg-sky-100 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.7)]">
                             <div className="flex items-center justify-between mb-3">
                                 <h2 className="text-lg font-bold text-gray-800">Weekday vs Weekend</h2>
-                                <img src="/icons/tag.svg" alt="Activity" className="w-7 h-7" />
+                                <Image src="/icons/tag.svg" alt="Activity" width={28} height={28} className="w-7 h-7" />
                             </div>
                             <div className="h-[280px]">
                                 <ResponsivePie
@@ -243,9 +244,11 @@ const ShareableResults = React.forwardRef<HTMLDivElement, ShareableResultsProps>
                         <div className="p-4 border-[1.5px] border-gray-800 rounded-lg bg-green-100 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.7)]">
                             <div className="flex items-center justify-between mb-3">
                                 <h2 className="text-lg font-bold text-gray-800">Interaction Matrix</h2>
-                                <img
+                                <Image
                                     src="/icons/users.svg"
                                     alt="Interactions"
+                                    width={28}
+                                    height={28}
                                     className="w-7 h-7"
                                 />
                             </div>
@@ -273,7 +276,7 @@ const ShareableResults = React.forwardRef<HTMLDivElement, ShareableResultsProps>
                     <div className="p-4 border-[1.5px] border-gray-800 rounded-lg bg-pink-50 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.7)]">
                         <div className="flex items-center justify-between mb-3">
                             <h2 className="text-lg font-bold text-gray-800">Monthly Activity</h2>
-                            <img src="/icons/graph_def.svg" alt="Monthly Activity" className="w-7 h-7" />
+                            <Image src="/icons/graph_def.svg" alt="Monthly Activity" width={28} height={28} className="w-7 h-7" />
                         </div>
                         <MonthlyActivity userMonthlyActivity={formattedMonthlyActivity} />
                     </div>
@@ -283,7 +286,7 @@ const ShareableResults = React.forwardRef<HTMLDivElement, ShareableResultsProps>
                 <div className="bg-green-100 p-5 rounded-lg shadow-[4px_4px_0px_0px_rgba(0,0,0,0.7)] border-[1.5px] border-gray-800 mb-6">
                     <div className="flex items-center justify-between mb-4">
                         <h2 className="text-lg font-bold text-gray-800">What Kinda Animal Are You?</h2>
-                        <img src="/icons/sparkle.svg" alt="AI Personas" className="w-7 h-7" />
+                        <Image src="/icons/sparkle.svg" alt="AI Personas" width={28} height={28} className="w-7 h-7" />
                     </div>
                     <AIAnalysis summary="" people={results.ai_analysis?.people || []} profilesOnly={true} useSimpleStyles={true} />
                 </div>

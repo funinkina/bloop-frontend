@@ -4,7 +4,6 @@ import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import domtoimage from 'dom-to-image';
-import { ResponsiveLine } from '@nivo/line';
 import { ResponsiveChord } from '@nivo/chord';
 import { ResponsivePie } from '@nivo/pie';
 import AIAnalysis from '@/components/AIAnalysis';
