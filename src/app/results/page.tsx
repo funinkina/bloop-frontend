@@ -10,6 +10,7 @@ import AIAnalysis from '@/components/AIAnalysis';
 import ChatStatistic from '@/components/ChatStatistics';
 import ShareableResults from '@/components/ShareableResults';
 import MonthlyActivity from '@/components/MonthlyActivity';
+import ShareOptionsModal from '@/components/ShareOptionsModal';
 import {
   Stats,
   AnalysisResults,
@@ -59,6 +60,11 @@ export default function ResultsPage() {
   const [topWords, setTopWords] = useState<{ text: string; value: number }[]>([]);
   const [containerWidth, setContainerWidth] = useState<number>(0);
   const [isDownloading, setIsDownloading] = useState<boolean>(false);
+  const [isShareModalOpen, setIsShareModalOpen] = useState<boolean>(false);
+  const [selectedSections, setSelectedSections] = useState<string[]>([
+    'chatStatistics', 'topWordsEmojis', 'aiAnalysis', 'animalAssignment',
+    'interactionWeekend', 'overTimeGraph'
+  ]);
   const wordContainerRef = useRef<HTMLDivElement>(null);
   const sectionRef = useRef<HTMLDivElement>(null);
   const shareableRef = useRef<HTMLDivElement>(null);
@@ -186,6 +192,16 @@ export default function ResultsPage() {
     'bg-violet-100',
   ];
 
+  const handleShare = () => {
+    setIsShareModalOpen(true);
+  };
+
+  const handleShareConfirm = (options: string[]) => {
+    setSelectedSections(options);
+    setIsShareModalOpen(false);
+    handleDownload();
+  };
+
   const handleDownload = async () => {
     if (shareableRef.current === null) {
       alert("Shareable content is not ready. Please try again.");
@@ -300,6 +316,7 @@ export default function ResultsPage() {
             formatFirstTextChampion={formatFirstTextChampion}
             formatMostIgnored={formatMostIgnored}
             wordCloudContainerWidth={shareableWordCloudContainerWidth}
+            selectedSections={selectedSections}
           />
         </div>
       )}
@@ -320,7 +337,7 @@ export default function ResultsPage() {
           </h1>
         </div>
         <button
-          onClick={handleDownload}
+          onClick={handleShare}
           disabled={isDownloading}
           className="mt-4 md:mt-0 bg-orange-300 border-2 border-neutral-800 shadow-[5px_5px_0px_0px_rgba(0,0,0,0.85)] hover:shadow-[10px_10px_0px_0px_rgba(0,0,0,0.85)] text-blue-950 px-6 py-4 rounded-xl flex items-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed self-center md:self-end transition duration-150 ease-in-out"
         >
@@ -328,6 +345,15 @@ export default function ResultsPage() {
           <p className='font-bold'>{isDownloading ? 'Downloading...' : 'Share these results'}</p>
         </button>
       </div>
+
+      {isShareModalOpen && (
+        <ShareOptionsModal
+          isOpen={isShareModalOpen}
+          onClose={() => setIsShareModalOpen(false)}
+          onConfirm={handleShareConfirm}
+          isDownloading={isDownloading}
+        />
+      )}
 
       {/* chat stats */}
       <div className="p-4" ref={sectionRef} >

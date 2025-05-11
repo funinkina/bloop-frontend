@@ -1,6 +1,4 @@
 import React from 'react';
-import { ResponsivePie } from '@nivo/pie';
-import { ResponsiveChord } from '@nivo/chord';
 import AIAnalysis from '@/components/AIAnalysis';
 import ChatStatistic from './ChatStatistics';
 import MonthlyActivity from '@/components/MonthlyActivity';
@@ -20,6 +18,7 @@ interface ShareableResultsProps {
     formatFirstTextChampion: (champion: Stats['first_text_champion']) => string;
     formatMostIgnored: (ignoredData: Stats['most_ignored_users_pct']) => string;
     wordCloudContainerWidth: number;
+    selectedSections: string[];
 }
 
 const bgColorsShareable = [
@@ -50,7 +49,7 @@ const getShareableCharSize = (count: number, text: string, topWords: { text: str
 
     let idealFontSizeRem = absoluteMaxCharSizeRem;
     if (N > 0) {
-        const estimatedFontSizePx = (availableWidthForWordPx - (N > 1 ? (N - 1) * 4 : 0) - N * 2) / (N * 0.8); // char width factor, spacing factor
+        const estimatedFontSizePx = (availableWidthForWordPx - (N > 1 ? (N - 1) * 4 : 0) - N * 2) / (N * 0.8);
         idealFontSizeRem = Math.max(minCharSizeRem, estimatedFontSizePx / baseFontSizePx);
     }
 
@@ -76,7 +75,7 @@ const getShareableCharSize = (count: number, text: string, topWords: { text: str
 
 
 const ShareableResults = React.forwardRef<HTMLDivElement, ShareableResultsProps>(
-    ({ results, topWords, sortedEmojis, chordMatrix, chordKeys, formatPeakHour, formatFirstTextChampion, formatMostIgnored, wordCloudContainerWidth }, ref) => {
+    ({ results, topWords, sortedEmojis, chordMatrix, chordKeys, formatPeakHour, formatFirstTextChampion, formatMostIgnored, wordCloudContainerWidth, selectedSections }, ref) => {
         if (!results || !results.stats) {
             return <div ref={ref} className="p-5">No data available for sharing.</div>;
         }
@@ -91,7 +90,7 @@ const ShareableResults = React.forwardRef<HTMLDivElement, ShareableResultsProps>
                 ref={ref}
                 className="w-[1200px] bg-amber-50 p-8 box-border font-sans text-gray-900 leading-relaxed"
             >
-                {/* Branding */}
+                {/* Branding - always show */}
                 <div className="flex justify-center items-end mb-6 gap-8">
                     <Image src="/bloop_logo.svg" alt="Bloop Logo" width={150} height={150} />
                     <p className="text-xl text-[#232F61] m-0">
@@ -99,7 +98,7 @@ const ShareableResults = React.forwardRef<HTMLDivElement, ShareableResultsProps>
                     </p>
                 </div>
 
-                {/* Title */}
+                {/* Title - always show */}
                 <h1 className="text-4xl mb-6 text-gray-800 text-center">
                     {results.chat_name ? (
                         <>Analysis of chats with <strong className="text-[#1A365D]">{results.chat_name}</strong></>
@@ -107,143 +106,90 @@ const ShareableResults = React.forwardRef<HTMLDivElement, ShareableResultsProps>
                 </h1>
 
                 {/* Stats Grid */}
-                <div className="grid grid-cols-3 gap-4 mb-6">
-                    <ChatStatistic title="you guys have sent" value={`${results.stats.total_messages.toLocaleString()} messages`} icon="chat.svg" altText="Total Messages" bgColor="bg-purple-100" textColor="text-violet-800" />
-                    <ChatStatistic title="you've been chatting for" value={`${results.stats.days_active ?? 'N/A'} ${results.stats.days_active === 1 ? 'day' : 'days'}`} icon="calendar.svg" altText="Days Active" bgColor="bg-green-100" textColor="text-green-800" />
-                    <ChatStatistic title="who gets ghosted the most?" value={formatMostIgnored(results.stats.most_ignored_users_pct)} icon="frown.svg" altText="Most Ignored" bgColor="bg-sky-100" textColor="text-sky-800" />
-                    <ChatStatistic title="peak convos at?" value={formatPeakHour(results.stats.peak_hour)} icon="peak.svg" altText="Peak Hour" bgColor="bg-sky-100" textColor="text-sky-900" />
-                    <ChatStatistic title="who texts first usually?" value={formatFirstTextChampion(results.stats.first_text_champion)} icon="trophy.svg" altText="First Texter" bgColor="bg-violet-100" textColor="text-violet-800" />
-                    <ChatStatistic title="you get the reply back in" value={`~${results.stats.average_response_time_minutes.toFixed(1)} mins`} icon="time.svg" altText="Avg Response Time" bgColor="bg-rose-100" textColor="text-rose-800" />
-                </div>
+                {selectedSections.includes('chatStatistics') && (
+                    <div className="grid grid-cols-3 gap-4 mb-6">
+                        <ChatStatistic title="you guys have sent" value={`${results.stats.total_messages.toLocaleString()} messages`} icon="chat.svg" altText="Total Messages" bgColor="bg-purple-100" textColor="text-violet-800" />
+                        <ChatStatistic title="you've been chatting for" value={`${results.stats.days_active ?? 'N/A'} ${results.stats.days_active === 1 ? 'day' : 'days'}`} icon="calendar.svg" altText="Days Active" bgColor="bg-green-100" textColor="text-green-800" />
+                        <ChatStatistic title="who gets ghosted the most?" value={formatMostIgnored(results.stats.most_ignored_users_pct)} icon="frown.svg" altText="Most Ignored" bgColor="bg-sky-100" textColor="text-sky-800" />
+                        <ChatStatistic title="peak convos at?" value={formatPeakHour(results.stats.peak_hour)} icon="peak.svg" altText="Peak Hour" bgColor="bg-sky-100" textColor="text-sky-900" />
+                        <ChatStatistic title="who texts first usually?" value={formatFirstTextChampion(results.stats.first_text_champion)} icon="trophy.svg" altText="First Texter" bgColor="bg-violet-100" textColor="text-violet-800" />
+                        <ChatStatistic title="you get the reply back in" value={`~${results.stats.average_response_time_minutes.toFixed(1)} mins`} icon="time.svg" altText="Avg Response Time" bgColor="bg-rose-100" textColor="text-rose-800" />
+                    </div>
+                )}
 
                 {/* Top words and emojis */}
-                <div className="grid grid-cols-2 gap-4 mb-6">
-                    <div className="p-4 border-1 border-gray-800 rounded-lg bg-gray-100 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.7)]">
-                        <div className="flex items-center justify-between mb-3">
-                            <h2 className="text-lg font-bold text-gray-800">Top {topWords.length} Words</h2>
-                            <Image src="/icons/words.svg" alt="Common Words" width={28} height={28} className="w-7 h-7" />
-                        </div>
-                        <div className="w-full flex flex-col items-start gap-2 pt-2">
-                            {topWords.length > 0 ? topWords.map(({ text, value }, wordIndex) => {
-                                const wordBgColor = getRandomBgColor(); // Use random background color for the word
-                                const charSize = getShareableCharSize(value, text, topWords, wordCloudContainerWidth);
-                                return (
-                                    <div key={text} className="flex items-baseline gap-1" title={`${text}: ${value} uses`}>
-                                        <div className="flex gap-1">
-                                            {text.split('').map((char, charIdx) => (
-                                                <span key={`${text}-${charIdx}`} className={`flex items-center justify-center rounded-sm font-bold text-gray-900 ${wordBgColor}`} style={{
-                                                    fontSize: charSize,
-                                                    width: `calc(${charSize} + 0.4rem)`, height: `calc(${charSize} + 0.4rem)`, lineHeight: '1'
-                                                }}>
-                                                    {char}
-                                                </span>
-                                            ))}
+                {selectedSections.includes('topWordsEmojis') && (
+                    <div className="grid grid-cols-2 gap-4 mb-6">
+                        <div className="p-4 border-1 border-gray-800 rounded-lg bg-gray-100 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.7)]">
+                            <div className="flex items-center justify-between mb-3">
+                                <h2 className="text-lg font-bold text-gray-800">Top {topWords.length} Words</h2>
+                                <Image src="/icons/words.svg" alt="Common Words" width={28} height={28} className="w-7 h-7" />
+                            </div>
+                            <div className="w-full flex flex-col items-start gap-2 pt-2">
+                                {topWords.length > 0 ? topWords.map(({ text, value }, wordIndex) => {
+                                    const wordBgColor = getRandomBgColor(); // Use random background color for the word
+                                    const charSize = getShareableCharSize(value, text, topWords, wordCloudContainerWidth);
+                                    return (
+                                        <div key={text} className="flex items-baseline gap-1" title={`${text}: ${value} uses`}>
+                                            <div className="flex gap-1">
+                                                {text.split('').map((char, charIdx) => (
+                                                    <span key={`${text}-${charIdx}`} className={`flex items-center justify-center rounded-sm font-bold text-gray-900 ${wordBgColor}`} style={{
+                                                        fontSize: charSize,
+                                                        width: `calc(${charSize} + 0.4rem)`, height: `calc(${charSize} + 0.4rem)`, lineHeight: '1'
+                                                    }}>
+                                                        {char}
+                                                    </span>
+                                                ))}
+                                            </div>
+                                            <span className="ml-1 text-xs text-gray-600 font-medium">x{value}</span>
                                         </div>
-                                        <span className="ml-1 text-xs text-gray-600 font-medium">x{value}</span>
+                                    );
+                                }) : <p className="text-gray-600">No common words.</p>}
+                            </div>
+                        </div>
+
+                        <div className="p-4 border-1 border-gray-800 rounded-lg bg-gray-100 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.7)] flex flex-col">
+                            <div className="flex items-center justify-between mb-3">
+                                <h2 className="text-lg font-bold text-gray-800">Top Emojis</h2>
+                                <Image src="/icons/lovely_face.svg" alt="Common Emojis" width={28} height={28} className="w-7 h-7" />
+                            </div>
+                            <div className="flex-grow flex items-center justify-center">
+                                {sortedEmojis.length > 0 ? (
+                                    <div className="grid grid-cols-3 grid-rows-2 gap-16 w-full items-center justify-between py-4">
+                                        {sortedEmojis.slice(0, 6).map(({ emoji, count }) => (
+                                            <span key={emoji} className={`flex items-center justify-center text-6xl p-2 rounded-md`} title={`${emoji}: ${count}`}>{emoji}</span>
+                                        ))}
                                     </div>
-                                );
-                            }) : <p className="text-gray-600">No common words.</p>}
+                                ) : <p className="text-gray-600 text-center">No common emojis.</p>}
+                            </div>
                         </div>
                     </div>
+                )}
 
-                    <div className="p-4 border-1 border-gray-800 rounded-lg bg-gray-100 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.7)] flex flex-col">
-                        <div className="flex items-center justify-between mb-3">
-                            <h2 className="text-lg font-bold text-gray-800">Top Emojis</h2>
-                            <Image src="/icons/lovely_face.svg" alt="Common Emojis" width={28} height={28} className="w-7 h-7" />
-                        </div>
-                        <div className="flex-grow flex items-center justify-center">
-                            {sortedEmojis.length > 0 ? (
-                                <div className="grid grid-cols-3 grid-rows-2 gap-16 w-full items-center justify-between py-4">
-                                    {sortedEmojis.slice(0, 6).map(({ emoji, count }) => (
-                                        <span key={emoji} className={`flex items-center justify-center text-6xl p-2 rounded-md`} title={`${emoji}: ${count}`}>{emoji}</span>
-                                    ))}
-                                </div>
-                            ) : <p className="text-gray-600 text-center">No common emojis.</p>}
-                        </div>
-                    </div>
-                </div>
-
-                {/* AI Summary, Weekday/Weekend Pie, Interaction Matrix */}
-                <div className="grid grid-cols-2 w-full gap-4 mb-6">
-                    <div className="p-4 border-1 border-gray-800 rounded-lg bg-purple-100 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.7)]">
+                {/* AI Summary */}
+                {selectedSections.includes('aiAnalysis') && (
+                    <div className="p-4 w-full border-1 border-gray-800 rounded-lg bg-purple-100 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.7)] mb-6">
                         <div className="flex items-center justify-between mb-3">
                             <h2 className="text-lg font-bold text-gray-800">AI Summary</h2>
                             <Image src="/icons/sparkle.svg" alt="AI Analysis" width={28} height={28} className="w-7 h-7" />
                         </div>
                         <AIAnalysis summary={results.ai_analysis?.summary || 'Summary not available.'} people={[]} summaryOnly={true} useSimpleStyles={true} />
                     </div>
-
-                    {/* Conditional rendering for Pie or Chord */}
-                    {results.stats.most_active_users_pct && Object.keys(results.stats.most_active_users_pct).length <= 2 ? (
-                        <div className="p-4 border-1 w-full border-gray-800 rounded-lg bg-sky-100 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.7)]">
-                            <div className="flex items-center justify-between mb-3">
-                                <h2 className="text-lg font-bold text-gray-800">Weekday vs Weekend</h2>
-                                <Image src="/icons/tag.svg" alt="Activity" width={28} height={28} className="w-7 h-7" />
-                            </div>
-                            <div className="h-64">
-                                <ResponsivePie
-                                    data={[
-                                        { id: 'Weekday', label: 'Weekday', value: results.stats.weekday_vs_weekend_avg.average_weekday_messages },
-                                        { id: 'Weekend', label: 'Weekend', value: results.stats.weekday_vs_weekend_avg.average_weekend_messages },
-                                    ]}
-                                    margin={{ top: 10, right: 10, bottom: 10, left: 10 }}
-                                    innerRadius={0.1} padAngle={0.7} cornerRadius={3} activeOuterRadiusOffset={8} borderWidth={1}
-                                    colors={{ scheme: 'set3' }} enableArcLabels={true} arcLabel={e => `${e.id}`} enableArcLinkLabels={false}
-                                    animate={false} isInteractive={false}
-                                    theme={{ labels: { text: { fontSize: 12, fontWeight: 600 } } }}
-                                />
-                            </div>
-                        </div>
-                    ) : results.stats.user_interaction_matrix && chordKeys.length > 2 && chordMatrix.length > 2 ? (
-                        <div className="p-4 w-full border-1 border-gray-800 rounded-lg bg-green-100 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.7)]">
-                            <div className="flex items-center justify-between mb-3">
-                                <h2 className="text-lg font-bold text-gray-800">Interaction Matrix</h2>
-                                <Image
-                                    src="/icons/users.svg"
-                                    alt="Interactions"
-                                    width={28}
-                                    height={28}
-                                    className="w-7 h-7"
-                                />
-                            </div>
-                            <div className="h-64">
-                                <ResponsiveChord
-                                    data={chordMatrix}
-                                    keys={chordKeys}
-                                    margin={{ top: 30, right: 40, bottom: 30, left: 40 }}
-                                    valueFormat=".0f"
-                                    padAngle={0.05}
-                                    innerRadiusRatio={0.96}
-                                    innerRadiusOffset={0}
-                                    enableLabel={true}
-                                    label="id"
-                                    labelOffset={15}
-                                    labelRotation={0}
-                                    colors={{ scheme: 'dark2' }}
-                                    isInteractive={true}
-                                    animate={true}
-                                    motionConfig="gentle"
-                                />
-                            </div>
-                        </div>
-                    ) : (
-                        <div className="p-4 border-1 border-gray-800 rounded-lg bg-yellow-100 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.7)] flex items-center justify-center">
-                            <p className="text-gray-500 text-base">Additional chart data not applicable.</p>
-                        </div>
-                    )}
-                </div>
+                )}
 
                 {/* People animal assignment */}
-                <div className="bg-green-100 p-5 rounded-lg shadow-[4px_4px_0px_0px_rgba(0,0,0,0.7)] border-[1.5px] border-gray-800 mb-6 w-full">
-                    <div className="flex items-center justify-between mb-4">
-                        <h2 className="text-lg font-bold text-gray-800">What Kinda Animal Are You?</h2>
-                        <Image src="/icons/sparkle.svg" alt="AI Personas" width={28} height={28} className="w-7 h-7" />
+                {selectedSections.includes('animalAssignment') && (
+                    <div className="bg-green-100 p-5 rounded-lg shadow-[4px_4px_0px_0px_rgba(0,0,0,0.7)] border-[1.5px] border-gray-800 mb-6 w-full">
+                        <div className="flex items-center justify-between mb-4">
+                            <h2 className="text-lg font-bold text-gray-800">What Kinda Animal Are You?</h2>
+                            <Image src="/icons/sparkle.svg" alt="AI Personas" width={28} height={28} className="w-7 h-7" />
+                        </div>
+                        <AIAnalysis summary="" people={results.ai_analysis?.people || []} profilesOnly={true} useSimpleStyles={true} />
                     </div>
-                    <AIAnalysis summary="" people={results.ai_analysis?.people || []} profilesOnly={true} useSimpleStyles={true} />
-                </div>
+                )}
 
                 {/* User Monthly Activity */}
-                {results.stats.user_monthly_activity && results.stats.user_monthly_activity.length > 0 && (
+                {selectedSections.includes('overTimeGraph') && results.stats.user_monthly_activity && results.stats.user_monthly_activity.length > 0 && (
                     <div className="p-4 border-1 border-gray-800 rounded-lg bg-pink-50 w-full shadow-[4px_4px_0px_0px_rgba(0,0,0,0.7)]">
                         <div className="flex items-center justify-between mb-3">
                             <h2 className="text-lg font-bold text-gray-800">Monthly Activity</h2>
