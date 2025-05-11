@@ -3,6 +3,7 @@ import { ResponsivePie } from '@nivo/pie';
 import { ResponsiveChord } from '@nivo/chord';
 import AIAnalysis from '@/components/AIAnalysis';
 import ChatStatistic from './ChatStatistics';
+import MonthlyActivity from '@/components/MonthlyActivity';
 
 interface Stats {
     total_messages: number;
@@ -117,16 +118,22 @@ const getShareableCharSize = (count: number, text: string, topWords: { text: str
     return `${clampedSize.toFixed(2)}rem`;
 };
 
+
 const ShareableResults = React.forwardRef<HTMLDivElement, ShareableResultsProps>(
     ({ results, topWords, sortedEmojis, chordMatrix, chordKeys, formatPeakHour, formatFirstTextChampion, formatMostIgnored, wordCloudContainerWidth }, ref) => {
         if (!results || !results.stats) {
-            return <div ref={ref} className="p-5 font-sans">No data available for sharing.</div>;
+            return <div ref={ref} className="p-5">No data available for sharing.</div>;
         }
+
+        const formattedMonthlyActivity = results.stats.user_monthly_activity.map(activity => ({
+            id: 'id' in activity && typeof activity.id === 'string' ? activity.id : 'Unknown',
+            data: 'data' in activity && Array.isArray(activity.data) ? activity.data : [],
+        }));
 
         return (
             <div
                 ref={ref}
-                className="w-[1200px] bg-[#fffbeb] p-8 box-border font-sans text-gray-900 leading-relaxed"
+                className="w-[1200px] bg-amber-50 p-8 box-border font-sans text-gray-900 leading-relaxed"
             >
                 {/* Branding */}
                 <div className="flex justify-center items-center mb-6 gap-4">
@@ -236,7 +243,11 @@ const ShareableResults = React.forwardRef<HTMLDivElement, ShareableResultsProps>
                         <div className="p-4 border-[1.5px] border-gray-800 rounded-lg bg-green-100 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.7)]">
                             <div className="flex items-center justify-between mb-3">
                                 <h2 className="text-lg font-bold text-gray-800">Interaction Matrix</h2>
-                                <img src="/icons/users_group.svg" alt="Interactions" className="w-7 h-7" />
+                                <img
+                                    src="/icons/users.svg"
+                                    alt="Interactions"
+                                    className="w-7 h-7"
+                                />
                             </div>
                             <div className="h-[280px] w-full">
                                 <ResponsiveChord
@@ -257,6 +268,17 @@ const ShareableResults = React.forwardRef<HTMLDivElement, ShareableResultsProps>
                     )}
                 </div>
 
+                {/* User Monthly Activity */}
+                {results.stats.user_monthly_activity && results.stats.user_monthly_activity.length > 0 && (
+                    <div className="p-4 border-[1.5px] border-gray-800 rounded-lg bg-pink-50 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.7)]">
+                        <div className="flex items-center justify-between mb-3">
+                            <h2 className="text-lg font-bold text-gray-800">Monthly Activity</h2>
+                            <img src="/icons/graph_def.svg" alt="Monthly Activity" className="w-7 h-7" />
+                        </div>
+                        <MonthlyActivity userMonthlyActivity={formattedMonthlyActivity} />
+                    </div>
+                )}
+
                 {/* People animal assignment */}
                 <div className="bg-green-100 p-5 rounded-lg shadow-[4px_4px_0px_0px_rgba(0,0,0,0.7)] border-[1.5px] border-gray-800 mb-6">
                     <div className="flex items-center justify-between mb-4">
@@ -265,6 +287,8 @@ const ShareableResults = React.forwardRef<HTMLDivElement, ShareableResultsProps>
                     </div>
                     <AIAnalysis summary="" people={results.ai_analysis?.people || []} profilesOnly={true} useSimpleStyles={true} />
                 </div>
+
+
             </div>
         );
     }

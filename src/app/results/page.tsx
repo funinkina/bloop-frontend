@@ -10,6 +10,7 @@ import { ResponsivePie } from '@nivo/pie';
 import AIAnalysis from '@/components/AIAnalysis';
 import ChatStatistic from '@/components/ChatStatistics';
 import ShareableResults from '@/components/ShareableResults';
+import MonthlyActivity from '@/components/MonthlyActivity';
 
 const isPhoneNumber = (str: string): boolean => {
   return /^\+\d+\s?\d[\d\s-]{5,}$/.test(str);
@@ -144,7 +145,7 @@ export default function ResultsPage() {
         }
 
         setResults(parsedResults);
-        console.log("AI Analysis data:", parsedResults.ai_analysis);
+        // console.log("AI Analysis data:", parsedResults.ai_analysis);
 
         if (parsedResults.stats?.common_words) {
           const sortedWords = Object.entries(parsedResults.stats.common_words)
@@ -762,74 +763,7 @@ export default function ResultsPage() {
                 className="mr-3"
               />
             </div>
-            <div className="h-96 w-full">
-              <ResponsiveLine
-                data={[{
-                  id: 'All Users',
-                  data: results.stats.user_monthly_activity.reduce((acc, user) => {
-                    user.data.forEach(item => {
-                      const existing = acc.find(a => a.x === item.x);
-                      if (existing) {
-                        existing.y += item.y;
-                      } else {
-                        acc.push({ ...item });
-                      }
-                    });
-                    return acc;
-                  }, [] as { x: string; y: number }[])
-                }]}
-                margin={{ top: 20, right: 20, bottom: 70, left: 70 }}
-                axisTop={null}
-                axisRight={null}
-                axisBottom={{
-                  format: (value) => {
-                    const date = new Date(value);
-                    return date.toLocaleDateString('en-US', {
-                      month: 'short',
-                      year: '2-digit'
-                    });
-                  },
-                  tickSize: 5,
-                  tickPadding: 5,
-                  tickRotation: typeof window !== 'undefined' && window.innerWidth < 768 ? -90 : -45
-                }}
-                axisLeft={{
-                  tickSize: 5,
-                  tickPadding: 5,
-                  tickRotation: 0,
-                  legend: 'Messages',
-                  legendOffset: -90,
-                  legendPosition: 'middle',
-                  tickValues: undefined,
-                  format: value => value.toLocaleString(),
-                }}
-                colors={{ scheme: 'set1' }}
-                enablePoints={false}
-                enableGridX={false}
-                enableGridY={true}
-                lineWidth={7}
-                useMesh={true}
-                curve="cardinal"
-                legends={[]}
-                theme={{
-                  axis: {
-                    ticks: {
-                      text: {
-                        fontSize: 14,
-                        fill: '#333',
-                        fontWeight: '600'
-                      }
-                    },
-                    legend: {
-                      text: {
-                        fontSize: 16,
-                        fill: '#666',
-                      }
-                    }
-                  }
-                }}
-              />
-            </div>
+            <MonthlyActivity userMonthlyActivity={results.stats.user_monthly_activity} />
           </section>
         )}
       </div>
