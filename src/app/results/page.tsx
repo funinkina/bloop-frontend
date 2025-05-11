@@ -3,12 +3,13 @@
 import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import domtoimage from 'dom-to-image';
 import { ResponsiveLine } from '@nivo/line';
 import { ResponsiveChord } from '@nivo/chord';
 import { ResponsivePie } from '@nivo/pie';
 import AIAnalysis from '@/components/AIAnalysis';
 import ChatStatistic from '@/components/ChatStatistics';
-import domtoimage from 'dom-to-image';
+import ShareableResults from '@/components/ShareableResults';
 
 const isPhoneNumber = (str: string): boolean => {
   return /^\+\d+\s?\d[\d\s-]{5,}$/.test(str);
@@ -82,7 +83,7 @@ interface PersonAnalysis {
   fun_lines?: string[];
 }
 
-interface AiAnalysis {
+interface AiAnalysisData {
   summary: string;
   people?: PersonAnalysis[];
   error?: string;
@@ -91,7 +92,7 @@ interface AiAnalysis {
 interface AnalysisResults {
   chat_name?: string;
   stats: Stats;
-  ai_analysis: AiAnalysis | null;
+  ai_analysis: AiAnalysisData | null;
   processing_time_seconds?: number;
   error?: string;
 }
@@ -105,6 +106,7 @@ export default function ResultsPage() {
   const [isDownloading, setIsDownloading] = useState<boolean>(false);
   const wordContainerRef = useRef<HTMLDivElement>(null);
   const sectionRef = useRef<HTMLDivElement>(null);
+  const shareableRef = useRef<HTMLDivElement>(null);
 
   const router = useRouter();
 
@@ -123,16 +125,17 @@ export default function ResultsPage() {
           try {
             const aiParsed = JSON.parse(parsedResults.ai_analysis as unknown as string);
             if (typeof aiParsed === 'object' && aiParsed !== null && 'summary' in aiParsed) {
-              parsedResults.ai_analysis = aiParsed;
+              parsedResults.ai_analysis = {
+                summary: aiParsed.summary,
+                people: aiParsed.people || [],
+                error: aiParsed.error
+              };
             } else {
-              throw new Error("Parsed AI data is not in the expected format.");
+              parsedResults.ai_analysis = { summary: parsedResults.ai_analysis as unknown as string, people: [] };
             }
           } catch (e) {
             console.error("Failed to parse AI analysis from string:", e);
-            parsedResults.ai_analysis = {
-              summary: parsedResults.ai_analysis as unknown as string,
-              people: []
-            };
+            parsedResults.ai_analysis = { summary: parsedResults.ai_analysis as unknown as string, people: [] };
           }
         }
 
@@ -260,6 +263,53 @@ export default function ResultsPage() {
     return `${displayName} (${percentage.toFixed(1)}%)`;
   };
 
+  const handleDownload = async () => {
+    if (shareableRef.current === null) {
+      alert("Shareable content is not ready. Please try again.");
+      return;
+    }
+    if (!results) {
+      alert("No results to share.");
+      return;
+    }
+
+    setIsDownloading(true);
+    const elementToCapture = shareableRef.current;
+
+    await new Promise(resolve => setTimeout(resolve, 200));
+
+    try {
+      const options = {
+        quality: 0.98,
+        width: elementToCapture.offsetWidth,
+        height: elementToCapture.offsetHeight,
+        style: {
+          margin: '0',
+        },
+        filter: (node: Node) => {
+          if (node instanceof Element && node.tagName === 'svg') {
+            const hasForeignObject = node.querySelector('foreignObject');
+            return !hasForeignObject;
+          }
+          return true;
+        }
+      };
+
+      const dataUrl = await domtoimage.toPng(elementToCapture, options);
+      const link = document.createElement('a');
+      const chatNamePart = results.chat_name ? results.chat_name.replace(/\s+/g, '_') : 'chat_summary';
+      link.download = `bloop-analysis-${chatNamePart}-${new Date().getTime()}.png`;
+      link.href = dataUrl;
+      link.click();
+    } catch (err: unknown) {
+      console.error('Error generating image:', err);
+      const errorMessage = err instanceof Error ? err.message : String(err);
+      alert(`Failed to generate image: ${errorMessage}. Check console for details.`);
+    } finally {
+      setIsDownloading(false);
+    }
+  };
+
   if (isLoading) {
     return (
       <div className="flex min-h-screen items-center justify-center">
@@ -305,108 +355,28 @@ export default function ResultsPage() {
       .sort((a, b) => b.count - a.count)
     : [];
 
-  const handleDownload = async () => {
-    if (sectionRef.current === null) return;
-
-    setIsDownloading(true);
-    const elementToCapture = sectionRef.current;
-    const elementsToHide = elementToCapture.querySelectorAll('[data-exclude-from-download="true"]');
-
-    const targetWidth = 1200;
-    const originalStyle = elementToCapture.style.cssText;
-
-    const brandingDiv = document.createElement('div');
-    brandingDiv.style.cssText = `
-      width: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 20px 0;
-      margin-bottom: 10px;
-      gap: 15px;
-    `;
-
-    const logoImg = document.createElement('img');
-    logoImg.src = '/bloop_logo.svg';
-    logoImg.alt = 'Bloop Logo';
-    logoImg.style.height = '50px';
-
-    const siteText = document.createElement('p');
-    siteText.textContent = 'generate your own at bloopit.vercel.app';
-    siteText.style.cssText = `
-      font-size: 22px;
-      font-weight: 600;
-      color: #232F61;
-      margin: 5;
-    `;
-
-    brandingDiv.appendChild(logoImg);
-    brandingDiv.appendChild(siteText);
-
-    elementToCapture.insertBefore(brandingDiv, elementToCapture.firstChild);
-
-    try {
-      elementsToHide.forEach(el => el.classList.add('hidden-for-download'));
-
-      const currentWidth = elementToCapture.offsetWidth;
-      const currentHeight = elementToCapture.offsetHeight;
-
-      if (currentWidth <= 0 || currentHeight <= 0) {
-        throw new Error("Cannot capture element with zero dimensions after hiding elements.");
-      }
-
-      const scale = targetWidth / currentWidth;
-      const targetHeight = currentHeight * scale;
-
-      elementToCapture.style.transform = `scale(${scale})`;
-      elementToCapture.style.transformOrigin = 'top left';
-
-      const options = {
-        quality: 0.98,
-        bgcolor: '#fffbeb',
-        width: targetWidth,
-        height: targetHeight,
-        style: {
-          transform: `scale(${scale})`,
-          transformOrigin: 'top left',
-          width: `${currentWidth}px`,
-          height: `${currentHeight}px`,
-        },
-        filter: (node: Node) => {
-          if (node instanceof Element && node.tagName === 'svg') {
-            const hasForeignObject = node.querySelector('foreignObject');
-            return !hasForeignObject;
-          }
-          if (node instanceof Element && node.classList.contains('hidden-for-download')) {
-            return false;
-          }
-          return true;
-        },
-      };
-
-      const dataUrl = await domtoimage.toPng(elementToCapture, options);
-
-      const link = document.createElement('a');
-      link.download = `chat-analysis-${new Date().getTime()}.png`;
-      link.href = dataUrl;
-      link.click();
-    } catch (err: unknown) {
-      console.error('Error generating image:', err);
-      const errorMessage = err instanceof Error ? err.message : 'Unknown error';
-      alert(`Failed to generate image: ${errorMessage}`);
-    } finally {
-      if (brandingDiv.parentNode === elementToCapture) {
-        elementToCapture.removeChild(brandingDiv);
-      }
-
-      elementsToHide.forEach(el => el.classList.remove('hidden-for-download'));
-      elementToCapture.style.cssText = originalStyle;
-      setIsDownloading(false);
-    }
-  };
+  const shareableWordCloudContainerWidth = results ? 525 : 0;
 
   return (
     <main className="container mx-auto p-6">
+      {results && (
+        <div style={{ position: 'fixed', left: '-9999px', top: '0px', zIndex: -100, pointerEvents: 'none', opacity: 0 }}>
+          <ShareableResults
+            key={results.chat_name || 'shareable-results'}
+            ref={shareableRef}
+            results={results}
+            topWords={topWords}
+            sortedEmojis={sortedEmojis}
+            chordMatrix={chordMatrix}
+            chordKeys={chordKeys}
+            formatPeakHour={formatPeakHour}
+            formatFirstTextChampion={formatFirstTextChampion}
+            formatMostIgnored={formatMostIgnored}
+            wordCloudContainerWidth={shareableWordCloudContainerWidth}
+          />
+        </div>
+      )}
+
       <div className="flex flex-col p-4 md:flex-row md:items-center md:justify-between mb-4">
         <div className="flex flex-col items-center md:items-start">
           <Image
