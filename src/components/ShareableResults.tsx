@@ -5,56 +5,10 @@ import AIAnalysis from '@/components/AIAnalysis';
 import ChatStatistic from './ChatStatistics';
 import MonthlyActivity from '@/components/MonthlyActivity';
 import Image from 'next/image';
-
-interface Stats {
-    total_messages: number;
-    days_active: number | null;
-    user_message_count: { [username: string]: number };
-    most_active_users_pct: { [username: string]: number };
-    conversation_starters_pct: { [username: string]: number };
-    most_ignored_users_pct: { [username: string]: number };
-    first_text_champion: {
-        user: string | null;
-        count: number;
-    };
-    longest_monologue: {
-        user: string | null;
-        count: number;
-    };
-    common_words: { [word: string]: number };
-    common_emojis: { [emoji: string]: number };
-    average_response_time_minutes: number;
-    peak_hour: number | null;
-    user_monthly_activity: object[];
-    weekday_vs_weekend_avg: {
-        average_weekday_messages: number;
-        average_weekend_messages: number;
-        difference: number;
-        percentage_difference: number;
-    };
-    user_interaction_matrix: (string | number | null)[][] | null;
-}
-
-interface PersonAnalysis {
-    name: string;
-    animal: string;
-    description: string;
-    fun_lines?: string[];
-}
-
-interface AiAnalysisData {
-    summary: string;
-    people?: PersonAnalysis[];
-    error?: string;
-}
-
-interface AnalysisResults {
-    chat_name?: string;
-    stats: Stats;
-    ai_analysis: AiAnalysisData | null;
-    processing_time_seconds?: number;
-    error?: string;
-}
+import {
+    Stats,
+    AnalysisResults,
+} from '@/lib/interfaces';
 
 interface ShareableResultsProps {
     results: AnalysisResults;
@@ -78,8 +32,6 @@ const bgColorsShareable = [
 ];
 
 const getRandomBgColor = () => bgColorsShareable[Math.floor(Math.random() * bgColorsShareable.length)];
-
-const tailwindBgClasses = Object.keys(bgColorsShareable);
 
 const getShareableCharSize = (count: number, text: string, topWords: { text: string; value: number }[], containerWidth: number) => {
     const minCharSizeRem = 0.8;
@@ -258,7 +210,7 @@ const ShareableResults = React.forwardRef<HTMLDivElement, ShareableResultsProps>
                                 <ResponsiveChord
                                     data={chordMatrix}
                                     keys={chordKeys}
-                                    margin={{ top: 20, right: 40, bottom: 10, left: 40 }}
+                                    margin={{ top: 30, right: 40, bottom: 30, left: 40 }}
                                     valueFormat=".0f"
                                     padAngle={0.05}
                                     innerRadiusRatio={0.96}

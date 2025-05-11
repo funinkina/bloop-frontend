@@ -10,10 +10,14 @@ import AIAnalysis from '@/components/AIAnalysis';
 import ChatStatistic from '@/components/ChatStatistics';
 import ShareableResults from '@/components/ShareableResults';
 import MonthlyActivity from '@/components/MonthlyActivity';
-
-const isPhoneNumber = (str: string): boolean => {
-  return /^\+\d+\s?\d[\d\s-]{5,}$/.test(str);
-};
+import {
+  Stats,
+  AnalysisResults,
+  isPhoneNumber,
+  formatPeakHour,
+  formatFirstTextChampion,
+  formatMostIgnored
+} from '@/lib/interfaces';
 
 const filterPhoneNumbers = (data: Record<string, number>): Record<string, number> => {
   return Object.fromEntries(
@@ -41,61 +45,12 @@ const filterChordData = (matrix: (string | number | null)[][], keys: string[]) =
   return { filteredMatrix: filteredMatrix as number[][], filteredKeys };
 };
 
-interface Stats {
-  total_messages: number;
-  days_active: number | null;
-  user_message_count: { [username: string]: number };
-  most_active_users_pct: { [username: string]: number };
-  conversation_starters_pct: { [username: string]: number };
-  most_ignored_users_pct: { [username: string]: number };
-  first_text_champion: {
-    user: string | null;
-    count: number;
-  };
-  longest_monologue: {
-    user: string | null;
-    count: number;
-  };
-  common_words: { [word: string]: number };
-  common_emojis: { [emoji: string]: number };
-  average_response_time_minutes: number;
-  peak_hour: number | null;
-  user_monthly_activity: Array<{
-    id: string;
-    data: Array<{
-      x: string;
-      y: number;
-    }>;
-  }>;
-  weekday_vs_weekend_avg: {
-    average_weekday_messages: number;
-    average_weekend_messages: number;
-    difference: number;
-    percentage_difference: number;
-  };
-  user_interaction_matrix: (string | number | null)[][] | null;
-}
-
-interface PersonAnalysis {
-  name: string;
-  animal: string;
-  description: string;
-  fun_lines?: string[];
-}
-
-interface AiAnalysisData {
-  summary: string;
-  people?: PersonAnalysis[];
-  error?: string;
-}
-
-interface AnalysisResults {
-  chat_name?: string;
-  stats: Stats;
-  ai_analysis: AiAnalysisData | null;
-  processing_time_seconds?: number;
-  error?: string;
-}
+const filterUserMonthlyActivity = (
+  activityData: Array<{ id: string; data: Array<{ x: string; y: number }> }>
+): Array<{ id: string; data: Array<{ x: string; y: number }> }> => {
+  if (!activityData) return [];
+  return activityData.filter(activity => !isPhoneNumber(activity.id));
+};
 
 export default function ResultsPage() {
   const [results, setResults] = useState<AnalysisResults | null>(null);
@@ -231,38 +186,6 @@ export default function ResultsPage() {
     'bg-violet-100',
   ];
 
-  const formatPeakHour = (hour: number | null): string => {
-    if (hour === null || hour < 0 || hour > 23) {
-      return 'N/A';
-    }
-    const ampm = hour >= 12 ? 'PM' : 'AM';
-    const displayHour = hour % 12 === 0 ? 12 : hour % 12;
-    return `${displayHour} ${ampm}`;
-  };
-
-  const formatFirstTextChampion = (champion: Stats['first_text_champion']): string => {
-    if (!champion || !champion.user) {
-      return 'N/A';
-    }
-    const displayName = isPhoneNumber(champion.user) ? champion.user : champion.user.split(' ')[0];
-    return `${displayName} (${champion.count} times)`;
-  };
-
-  const formatMostIgnored = (ignoredData: Stats['most_ignored_users_pct']): string => {
-    if (!ignoredData || Object.keys(ignoredData).length === 0) {
-      return 'N/A';
-    }
-    const sortedIgnored = Object.entries(ignoredData)
-      .sort(([, percentageA], [, percentageB]) => percentageB - percentageA);
-
-    if (sortedIgnored.length === 0) {
-      return 'N/A';
-    }
-    const [user, percentage] = sortedIgnored[0];
-    const displayName = isPhoneNumber(user) ? user : user.split(' ')[0];
-    return `${displayName} (${percentage.toFixed(1)}%)`;
-  };
-
   const handleDownload = async () => {
     if (shareableRef.current === null) {
       alert("Shareable content is not ready. Please try again.");
@@ -356,6 +279,10 @@ export default function ResultsPage() {
     : [];
 
   const shareableWordCloudContainerWidth = results ? 525 : 0;
+
+  const filteredMonthlyActivity = results.stats.user_monthly_activity
+    ? filterUserMonthlyActivity(results.stats.user_monthly_activity as Array<{ id: string; data: Array<{ x: string; y: number }> }>)
+    : [];
 
   return (
     <main className="container mx-auto p-6">
@@ -624,7 +551,7 @@ export default function ResultsPage() {
                 <ResponsiveChord
                   data={chordMatrix}
                   keys={chordKeys}
-                  margin={{ top: 20, right: 40, bottom: 10, left: 40 }}
+                  margin={{ top: 30, right: 40, bottom: 30, left: 40 }}
                   valueFormat=".0f"
                   padAngle={0.05}
                   innerRadiusRatio={0.96}
@@ -736,7 +663,7 @@ export default function ResultsPage() {
         </div>
 
         {/* user monthly activity */}
-        {results.stats.user_monthly_activity && results.stats.user_monthly_activity.length > 0 && (
+        {filteredMonthlyActivity && filteredMonthlyActivity.length > 0 && (
           <section className="p-4 mb-20 border-2 border-neutral-800 rounded-lg bg-pink-50 shadow-[5px_5px_0px_0px_rgba(0,0,0,0.85)]  hover:shadow-[10px_10px_0px_0px_rgba(0,0,0,0.85)] transition duration-150 ease-in-out"
             data-exclude-from-download="true">
             <div className='flex items-center justify-between'>
@@ -749,7 +676,7 @@ export default function ResultsPage() {
                 className="mr-3"
               />
             </div>
-            <MonthlyActivity userMonthlyActivity={results.stats.user_monthly_activity} />
+            <MonthlyActivity userMonthlyActivity={filteredMonthlyActivity} />
           </section>
         )}
       </div>
