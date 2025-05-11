@@ -75,7 +75,7 @@ const getShareableCharSize = (count: number, text: string, topWords: { text: str
 
 
 const ShareableResults = React.forwardRef<HTMLDivElement, ShareableResultsProps>(
-    ({ results, topWords, sortedEmojis, chordMatrix, chordKeys, formatPeakHour, formatFirstTextChampion, formatMostIgnored, wordCloudContainerWidth, selectedSections }, ref) => {
+    ({ results, topWords, sortedEmojis, formatPeakHour, formatFirstTextChampion, formatMostIgnored, wordCloudContainerWidth, selectedSections }, ref) => {
         if (!results || !results.stats) {
             return <div ref={ref} className="p-5">No data available for sharing.</div>;
         }
@@ -126,8 +126,8 @@ const ShareableResults = React.forwardRef<HTMLDivElement, ShareableResultsProps>
                                 <Image src="/icons/words.svg" alt="Common Words" width={28} height={28} className="w-7 h-7" />
                             </div>
                             <div className="w-full flex flex-col items-start gap-2 pt-2">
-                                {topWords.length > 0 ? topWords.map(({ text, value }, wordIndex) => {
-                                    const wordBgColor = getRandomBgColor(); // Use random background color for the word
+                                {topWords.length > 0 ? topWords.map(({ text, value }) => {
+                                    const wordBgColor = getRandomBgColor();
                                     const charSize = getShareableCharSize(value, text, topWords, wordCloudContainerWidth);
                                     return (
                                         <div key={text} className="flex items-baseline gap-1" title={`${text}: ${value} uses`}>

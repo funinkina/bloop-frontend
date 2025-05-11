@@ -12,7 +12,6 @@ import ShareableResults from '@/components/ShareableResults';
 import MonthlyActivity from '@/components/MonthlyActivity';
 import ShareOptionsModal from '@/components/ShareOptionsModal';
 import {
-  Stats,
   AnalysisResults,
   isPhoneNumber,
   formatPeakHour,
