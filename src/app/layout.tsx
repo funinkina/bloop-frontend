@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import Head from "next/head";
 import { DM_Sans } from "next/font/google";
 import Image from 'next/image';
-import { Analytics } from "@vercel/analytics/react"
+import { Analytics } from "@vercel/analytics/react";
+import Script from "next/script";
 import "./globals.css";
 
 const dmSans = DM_Sans({
@@ -15,6 +15,9 @@ export const metadata: Metadata = {
   icons: {
     icon: "/favicon.ico",
   },
+  other: {
+    'google-adsense-account': 'ca-pub-5230987521071301',
+  },
 };
 
 export default function RootLayout({
@@ -24,11 +27,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <Head>
-        <link rel="icon" href="favicon.ico" />
-        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5230987521071301" crossOrigin="anonymous"></script>
-        <meta name="google-adsense-account" content="ca-pub-5230987521071301"></meta>
-      </Head>
+      <Script
+        async
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5230987521071301"
+        crossOrigin="anonymous"
+      />
       <Analytics />
       <body className={`${dmSans.className} flex flex-col min-h-screen`}>
         <div className="flex-grow">
