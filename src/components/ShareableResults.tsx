@@ -68,14 +68,17 @@ interface ShareableResultsProps {
     wordCloudContainerWidth: number;
 }
 
-const bgColorsShareable: { [key: string]: string } = {
-    'bg-rose-100': '#FFE4E6',
-    'bg-green-100': '#D1FAE5',
-    'bg-pink-100': '#FCE7F3',
-    'bg-purple-100': '#F3E8FF',
-    'bg-sky-100': '#E0F2FE',
-    'bg-violet-100': '#EDE9FE',
-};
+const bgColorsShareable = [
+    'bg-rose-100',
+    'bg-green-100',
+    'bg-pink-100',
+    'bg-purple-100',
+    'bg-sky-100',
+    'bg-violet-100',
+];
+
+const getRandomBgColor = () => bgColorsShareable[Math.floor(Math.random() * bgColorsShareable.length)];
+
 const tailwindBgClasses = Object.keys(bgColorsShareable);
 
 const getShareableCharSize = (count: number, text: string, topWords: { text: string; value: number }[], containerWidth: number) => {
@@ -137,15 +140,15 @@ const ShareableResults = React.forwardRef<HTMLDivElement, ShareableResultsProps>
                 className="w-[1200px] bg-amber-50 p-8 box-border font-sans text-gray-900 leading-relaxed"
             >
                 {/* Branding */}
-                <div className="flex justify-center items-center mb-6 gap-4">
-                    <Image src="/bloop_logo.svg" alt="Bloop Logo" width={48} height={48} className="h-12" />
-                    <p className="text-lg font-semibold text-[#232F61] m-0">
-                        generate your own at bloopit.vercel.app
+                <div className="flex justify-center items-end mb-6 gap-8">
+                    <Image src="/bloop_logo.svg" alt="Bloop Logo" width={150} height={150} />
+                    <p className="text-xl text-[#232F61] m-0">
+                        generate your own at <strong>bloopit.vercel.app</strong>
                     </p>
                 </div>
 
                 {/* Title */}
-                <h1 className="text-2xl mb-6 text-gray-800 text-center font-bold">
+                <h1 className="text-4xl mb-6 text-gray-800 text-center">
                     {results.chat_name ? (
                         <>Analysis of chats with <strong className="text-[#1A365D]">{results.chat_name}</strong></>
                     ) : "Analysis Results"}
@@ -156,29 +159,28 @@ const ShareableResults = React.forwardRef<HTMLDivElement, ShareableResultsProps>
                     <ChatStatistic title="you guys have sent" value={`${results.stats.total_messages.toLocaleString()} messages`} icon="chat.svg" altText="Total Messages" bgColor="bg-purple-100" textColor="text-violet-800" />
                     <ChatStatistic title="you've been chatting for" value={`${results.stats.days_active ?? 'N/A'} ${results.stats.days_active === 1 ? 'day' : 'days'}`} icon="calendar.svg" altText="Days Active" bgColor="bg-green-100" textColor="text-green-800" />
                     <ChatStatistic title="who gets ghosted the most?" value={formatMostIgnored(results.stats.most_ignored_users_pct)} icon="frown.svg" altText="Most Ignored" bgColor="bg-sky-100" textColor="text-sky-800" />
-                    <ChatStatistic title="when does your conversations peak?" value={formatPeakHour(results.stats.peak_hour)} icon="peak.svg" altText="Peak Hour" bgColor="bg-sky-100" textColor="text-sky-900" />
+                    <ChatStatistic title="peak convos at?" value={formatPeakHour(results.stats.peak_hour)} icon="peak.svg" altText="Peak Hour" bgColor="bg-sky-100" textColor="text-sky-900" />
                     <ChatStatistic title="who texts first usually?" value={formatFirstTextChampion(results.stats.first_text_champion)} icon="trophy.svg" altText="First Texter" bgColor="bg-violet-100" textColor="text-violet-800" />
                     <ChatStatistic title="you get the reply back in" value={`~${results.stats.average_response_time_minutes.toFixed(1)} mins`} icon="time.svg" altText="Avg Response Time" bgColor="bg-rose-100" textColor="text-rose-800" />
                 </div>
 
                 {/* Top words and emojis */}
                 <div className="grid grid-cols-2 gap-4 mb-6">
-                    <div className="p-4 border-[1.5px] border-gray-800 rounded-lg bg-gray-100 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.7)]">
+                    <div className="p-4 border-1 border-gray-800 rounded-lg bg-gray-100 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.7)]">
                         <div className="flex items-center justify-between mb-3">
                             <h2 className="text-lg font-bold text-gray-800">Top {topWords.length} Words</h2>
                             <Image src="/icons/words.svg" alt="Common Words" width={28} height={28} className="w-7 h-7" />
                         </div>
                         <div className="w-full flex flex-col items-start gap-2 pt-2">
                             {topWords.length > 0 ? topWords.map(({ text, value }, wordIndex) => {
-                                const bgColorKey = tailwindBgClasses[wordIndex % tailwindBgClasses.length];
-                                const bgColor = bgColorsShareable[bgColorKey] || '#E0E7FF';
+                                const wordBgColor = getRandomBgColor(); // Use random background color for the word
                                 const charSize = getShareableCharSize(value, text, topWords, wordCloudContainerWidth);
                                 return (
                                     <div key={text} className="flex items-baseline gap-1" title={`${text}: ${value} uses`}>
                                         <div className="flex gap-1">
                                             {text.split('').map((char, charIdx) => (
-                                                <span key={`${text}-${charIdx}`} className="flex items-center justify-center rounded-sm font-bold text-gray-900" style={{
-                                                    backgroundColor: bgColor, fontSize: charSize,
+                                                <span key={`${text}-${charIdx}`} className={`flex items-center justify-center rounded-sm font-bold text-gray-900 ${wordBgColor}`} style={{
+                                                    fontSize: charSize,
                                                     width: `calc(${charSize} + 0.4rem)`, height: `calc(${charSize} + 0.4rem)`, lineHeight: '1'
                                                 }}>
                                                     {char}
@@ -192,16 +194,16 @@ const ShareableResults = React.forwardRef<HTMLDivElement, ShareableResultsProps>
                         </div>
                     </div>
 
-                    <div className="p-4 border-[1.5px] border-gray-800 rounded-lg bg-gray-100 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.7)] flex flex-col">
+                    <div className="p-4 border-1 border-gray-800 rounded-lg bg-gray-100 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.7)] flex flex-col">
                         <div className="flex items-center justify-between mb-3">
                             <h2 className="text-lg font-bold text-gray-800">Top Emojis</h2>
                             <Image src="/icons/lovely_face.svg" alt="Common Emojis" width={28} height={28} className="w-7 h-7" />
                         </div>
                         <div className="flex-grow flex items-center justify-center">
                             {sortedEmojis.length > 0 ? (
-                                <div className="grid grid-cols-3 grid-rows-2 gap-2 w-full items-center justify-center py-4">
+                                <div className="grid grid-cols-3 grid-rows-2 gap-16 w-full items-center justify-between py-4">
                                     {sortedEmojis.slice(0, 6).map(({ emoji, count }) => (
-                                        <span key={emoji} className="flex items-center justify-center text-6xl" title={`${emoji}: ${count}`}>{emoji}</span>
+                                        <span key={emoji} className={`flex items-center justify-center text-6xl p-2 rounded-md`} title={`${emoji}: ${count}`}>{emoji}</span>
                                     ))}
                                 </div>
                             ) : <p className="text-gray-600 text-center">No common emojis.</p>}
@@ -210,8 +212,8 @@ const ShareableResults = React.forwardRef<HTMLDivElement, ShareableResultsProps>
                 </div>
 
                 {/* AI Summary, Weekday/Weekend Pie, Interaction Matrix */}
-                <div className="grid grid-cols-2 gap-4 mb-6">
-                    <div className="p-4 border-[1.5px] border-gray-800 rounded-lg bg-purple-100 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.7)]">
+                <div className="grid grid-cols-2 w-full gap-4 mb-6">
+                    <div className="p-4 border-1 border-gray-800 rounded-lg bg-purple-100 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.7)]">
                         <div className="flex items-center justify-between mb-3">
                             <h2 className="text-lg font-bold text-gray-800">AI Summary</h2>
                             <Image src="/icons/sparkle.svg" alt="AI Analysis" width={28} height={28} className="w-7 h-7" />
@@ -221,12 +223,12 @@ const ShareableResults = React.forwardRef<HTMLDivElement, ShareableResultsProps>
 
                     {/* Conditional rendering for Pie or Chord */}
                     {results.stats.most_active_users_pct && Object.keys(results.stats.most_active_users_pct).length <= 2 ? (
-                        <div className="p-4 border-[1.5px] border-gray-800 rounded-lg bg-sky-100 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.7)]">
+                        <div className="p-4 border-1 w-full border-gray-800 rounded-lg bg-sky-100 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.7)]">
                             <div className="flex items-center justify-between mb-3">
                                 <h2 className="text-lg font-bold text-gray-800">Weekday vs Weekend</h2>
                                 <Image src="/icons/tag.svg" alt="Activity" width={28} height={28} className="w-7 h-7" />
                             </div>
-                            <div className="h-[280px]">
+                            <div className="h-64">
                                 <ResponsivePie
                                     data={[
                                         { id: 'Weekday', label: 'Weekday', value: results.stats.weekday_vs_weekend_avg.average_weekday_messages },
@@ -241,7 +243,7 @@ const ShareableResults = React.forwardRef<HTMLDivElement, ShareableResultsProps>
                             </div>
                         </div>
                     ) : results.stats.user_interaction_matrix && chordKeys.length > 2 && chordMatrix.length > 2 ? (
-                        <div className="p-4 border-[1.5px] border-gray-800 rounded-lg bg-green-100 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.7)]">
+                        <div className="p-4 w-full border-1 border-gray-800 rounded-lg bg-green-100 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.7)]">
                             <div className="flex items-center justify-between mb-3">
                                 <h2 className="text-lg font-bold text-gray-800">Interaction Matrix</h2>
                                 <Image
@@ -252,38 +254,35 @@ const ShareableResults = React.forwardRef<HTMLDivElement, ShareableResultsProps>
                                     className="w-7 h-7"
                                 />
                             </div>
-                            <div className="h-[280px] w-full">
+                            <div className="h-64">
                                 <ResponsiveChord
-                                    data={chordMatrix} keys={chordKeys}
-                                    margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
-                                    valueFormat=".0f" padAngle={0.05} innerRadiusRatio={0.94} innerRadiusOffset={0.02}
-                                    arcBorderWidth={1} arcBorderColor={{ from: 'color', modifiers: [['darker', 0.4]] }}
-                                    enableLabel={true} label={d => d.id.substring(0, 5)} labelOffset={10} labelRotation={-90}
-                                    colors={{ scheme: 'nivo' }} isInteractive={false} animate={false}
-                                    theme={{ labels: { text: { fontSize: 10, fontWeight: 500 } } }}
+                                    data={chordMatrix}
+                                    keys={chordKeys}
+                                    margin={{ top: 20, right: 40, bottom: 10, left: 40 }}
+                                    valueFormat=".0f"
+                                    padAngle={0.05}
+                                    innerRadiusRatio={0.96}
+                                    innerRadiusOffset={0}
+                                    enableLabel={true}
+                                    label="id"
+                                    labelOffset={15}
+                                    labelRotation={0}
+                                    colors={{ scheme: 'dark2' }}
+                                    isInteractive={true}
+                                    animate={true}
+                                    motionConfig="gentle"
                                 />
                             </div>
                         </div>
                     ) : (
-                        <div className="p-4 border-[1.5px] border-gray-800 rounded-lg bg-yellow-100 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.7)] flex items-center justify-center">
+                        <div className="p-4 border-1 border-gray-800 rounded-lg bg-yellow-100 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.7)] flex items-center justify-center">
                             <p className="text-gray-500 text-base">Additional chart data not applicable.</p>
                         </div>
                     )}
                 </div>
 
-                {/* User Monthly Activity */}
-                {results.stats.user_monthly_activity && results.stats.user_monthly_activity.length > 0 && (
-                    <div className="p-4 border-[1.5px] border-gray-800 rounded-lg bg-pink-50 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.7)]">
-                        <div className="flex items-center justify-between mb-3">
-                            <h2 className="text-lg font-bold text-gray-800">Monthly Activity</h2>
-                            <Image src="/icons/graph_def.svg" alt="Monthly Activity" width={28} height={28} className="w-7 h-7" />
-                        </div>
-                        <MonthlyActivity userMonthlyActivity={formattedMonthlyActivity} />
-                    </div>
-                )}
-
                 {/* People animal assignment */}
-                <div className="bg-green-100 p-5 rounded-lg shadow-[4px_4px_0px_0px_rgba(0,0,0,0.7)] border-[1.5px] border-gray-800 mb-6">
+                <div className="bg-green-100 p-5 rounded-lg shadow-[4px_4px_0px_0px_rgba(0,0,0,0.7)] border-[1.5px] border-gray-800 mb-6 w-full">
                     <div className="flex items-center justify-between mb-4">
                         <h2 className="text-lg font-bold text-gray-800">What Kinda Animal Are You?</h2>
                         <Image src="/icons/sparkle.svg" alt="AI Personas" width={28} height={28} className="w-7 h-7" />
@@ -291,6 +290,16 @@ const ShareableResults = React.forwardRef<HTMLDivElement, ShareableResultsProps>
                     <AIAnalysis summary="" people={results.ai_analysis?.people || []} profilesOnly={true} useSimpleStyles={true} />
                 </div>
 
+                {/* User Monthly Activity */}
+                {results.stats.user_monthly_activity && results.stats.user_monthly_activity.length > 0 && (
+                    <div className="p-4 border-1 border-gray-800 rounded-lg bg-pink-50 w-full shadow-[4px_4px_0px_0px_rgba(0,0,0,0.7)]">
+                        <div className="flex items-center justify-between mb-3">
+                            <h2 className="text-lg font-bold text-gray-800">Monthly Activity</h2>
+                            <Image src="/icons/graph_def.svg" alt="Monthly Activity" width={28} height={28} className="w-7 h-7" />
+                        </div>
+                        <MonthlyActivity userMonthlyActivity={formattedMonthlyActivity} />
+                    </div>
+                )}
 
             </div>
         );

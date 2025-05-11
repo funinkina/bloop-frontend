@@ -86,11 +86,11 @@ const MonthlyActivity: React.FC<MonthlyActivityProps> = ({ userMonthlyActivity }
                             borderRadius: '3px',
                         }}
                     >
-                        <strong>date:</strong> {new Date(point.data.x).toLocaleDateString('en-US', {
+                        <strong>Date:</strong> {new Date(point.data.x).toLocaleDateString('en-US', {
                             month: 'short',
-                            year: '2-digit',
+                            year: 'numeric',
                         })}<br />
-                        <strong>messages:</strong> {point.data.yFormatted}
+                        <strong>Messages:</strong> {point.data.yFormatted}
                     </div>
                 )}
             />

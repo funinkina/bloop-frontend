@@ -280,7 +280,7 @@ export default function ResultsPage() {
 
     try {
       const options = {
-        quality: 0.98,
+        quality: 1,
         width: elementToCapture.offsetWidth,
         height: elementToCapture.offsetHeight,
         style: {
@@ -298,7 +298,7 @@ export default function ResultsPage() {
       const dataUrl = await domtoimage.toPng(elementToCapture, options);
       const link = document.createElement('a');
       const chatNamePart = results.chat_name ? results.chat_name.replace(/\s+/g, '_') : 'chat_summary';
-      link.download = `bloop-analysis-${chatNamePart}-${new Date().getTime()}.png`;
+      link.download = `Bloop-Analysis-${chatNamePart}.png`;
       link.href = dataUrl;
       link.click();
     } catch (err: unknown) {
@@ -397,21 +397,8 @@ export default function ResultsPage() {
           disabled={isDownloading}
           className="mt-4 md:mt-0 bg-orange-300 border-2 border-neutral-800 shadow-[5px_5px_0px_0px_rgba(0,0,0,0.85)] hover:shadow-[10px_10px_0px_0px_rgba(0,0,0,0.85)] text-blue-950 px-6 py-4 rounded-xl flex items-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed self-center md:self-end transition duration-150 ease-in-out"
         >
-          {isDownloading ? (
-            <>
-              <svg width="28" height="35" viewBox="0 0 28 35" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M20.5092 5.26808C20.5092 4.62482 20.2093 4.03734 20.2093 3.34669C20.2093 2.71773 20.5034 2.27321 20.959 2.0014M20.959 2.0014C22.5214 1.06931 25.9833 2.16823 25.9999 4.82512C26.0167 7.501 21.9655 9.61571 19.9039 7.72491C19.5537 7.40377 19.2779 7.03072 19.0775 6.6314M20.959 2.0014C18.7847 2.56063 18.1861 4.85569 19.0775 6.6314M20.959 2.0014C21.0174 1.98639 21.0769 1.97263 21.1375 1.96016C21.7375 1.83682 24.2301 2.61315 23.1042 3.50938C21.8061 4.54275 20.4308 5.57896 19.0775 6.6314M19.0775 6.6314C18.4947 7.08463 17.916 7.54087 17.3493 8.00119C12.9845 11.5466 7.06471 14.6898 3.87823 19.4062C3.40003 20.114 2.59492 20.5665 2.0571 21.2243C1.80287 21.5353 2.46221 21.3585 2.76675 21.3585C4.28703 21.3585 5.44751 21.988 6.7914 22.6651C10.9832 24.7769 15.1693 27.7405 19.5745 29.3375M19.5745 29.3375C19.6098 29.3503 19.6452 29.3631 19.6805 29.3757C21.3582 29.975 21.1591 30.5433 20.9209 28.8488C20.7998 27.9873 21.1262 27.2264 21.6599 26.7117M19.5745 29.3375C19.5891 31.1039 20.1403 33.4421 22.2145 32.8748C24.6076 32.2203 26.6771 29.509 25.0932 27.0713C24.1778 25.6625 22.5983 25.8065 21.6599 26.7117M19.5745 29.3375C19.5721 29.0459 19.5843 28.7699 19.6068 28.5252C19.6784 27.7424 20.6128 27.0377 21.6599 26.7117M21.6599 26.7117C23.0644 26.2744 24.6719 26.5186 24.6719 28.1707" stroke="#232F61" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-              <p className='font-bold'>Downloading...</p>
-            </>
-          ) : (
-            <>
-              <svg width="20" height="25" viewBox="0 0 28 35" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M20.5092 5.26808C20.5092 4.62482 20.2093 4.03734 20.2093 3.34669C20.2093 2.71773 20.5034 2.27321 20.959 2.0014M20.959 2.0014C22.5214 1.06931 25.9833 2.16823 25.9999 4.82512C26.0167 7.501 21.9655 9.61571 19.9039 7.72491C19.5537 7.40377 19.2779 7.03072 19.0775 6.6314M20.959 2.0014C18.7847 2.56063 18.1861 4.85569 19.0775 6.6314M20.959 2.0014C21.0174 1.98639 21.0769 1.97263 21.1375 1.96016C21.7375 1.83682 24.2301 2.61315 23.1042 3.50938C21.8061 4.54275 20.4308 5.57896 19.0775 6.6314M19.0775 6.6314C18.4947 7.08463 17.916 7.54087 17.3493 8.00119C12.9845 11.5466 7.06471 14.6898 3.87823 19.4062C3.40003 20.114 2.59492 20.5665 2.0571 21.2243C1.80287 21.5353 2.46221 21.3585 2.76675 21.3585C4.28703 21.3585 5.44751 21.988 6.7914 22.6651C10.9832 24.7769 15.1693 27.7405 19.5745 29.3375M19.5745 29.3375C19.6098 29.3503 19.6452 29.3631 19.6805 29.3757C21.3582 29.975 21.1591 30.5433 20.9209 28.8488C20.7998 27.9873 21.1262 27.2264 21.6599 26.7117M19.5745 29.3375C19.5891 31.1039 20.1403 33.4421 22.2145 32.8748C24.6076 32.2203 26.6771 29.509 25.0932 27.0713C24.1778 25.6625 22.5983 25.8065 21.6599 26.7117M19.5745 29.3375C19.5721 29.0459 19.5843 28.7699 19.6068 28.5252C19.6784 27.7424 20.6128 27.0377 21.6599 26.7117M21.6599 26.7117C23.0644 26.2744 24.6719 26.5186 24.6719 28.1707" stroke="#232F61" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-              <p className='font-semibold'>Share these results</p>
-            </>
-          )}
+          <Image src='/icons/share.svg' width={20} height={20} alt='share icon'></Image>
+          <p className='font-bold'>{isDownloading ? 'Downloading...' : 'Share these results'}</p>
         </button>
       </div>
 
@@ -622,7 +609,7 @@ export default function ResultsPage() {
           )}
 
           {results.stats.user_interaction_matrix && chordKeys.length > 2 && chordMatrix.length > 2 && (
-            <section className="p-4 border-2 border-neutral-800 rounded-lg bg-lime-50 shadow-[5px_5px_0px_0px_rgba(0,0,0,0.85)] hover:shadow-[10px_10px_0px_0px_rgba(0,0,0,0.85)] transition duration-150 ease-in-out">
+            <section className="pt-4 pr-4 pl-4 border-2 border-neutral-800 rounded-lg bg-lime-50 shadow-[5px_5px_0px_0px_rgba(0,0,0,0.85)] hover:shadow-[10px_10px_0px_0px_rgba(0,0,0,0.85)] transition duration-150 ease-in-out">
               <div className='flex items-center justify-between mb-4'>
                 <h2 className="text-xl font-semibold mb-4 text-gray-700">you guys are really chaotic huh?</h2>
                 <Image
@@ -637,7 +624,7 @@ export default function ResultsPage() {
                 <ResponsiveChord
                   data={chordMatrix}
                   keys={chordKeys}
-                  margin={{ top: 40, right: 40, bottom: 40, left: 40 }}
+                  margin={{ top: 20, right: 40, bottom: 10, left: 40 }}
                   valueFormat=".0f"
                   padAngle={0.05}
                   innerRadiusRatio={0.96}
