@@ -21,7 +21,16 @@ export default function HomePage() {
         const data = await response.json();
 
         if (!response.ok) {
+          sessionStorage.removeItem('preferredBackendUrl');
           throw new Error(data.message || `Server health check failed with status: ${response.status}`);
+        }
+
+        if (data.selected_backend) {
+          sessionStorage.setItem('preferredBackendUrl', data.selected_backend);
+          // console.log('Preferred backend set by health check:', data.selected_backend);
+        } else {
+          sessionStorage.removeItem('preferredBackendUrl');
+          console.warn('Health check response did not include selected_backend.');
         }
 
         if (
@@ -61,6 +70,7 @@ export default function HomePage() {
         }
       } catch (err) {
         console.error("Failed to fetch server health:", err);
+        sessionStorage.removeItem('preferredBackendUrl');
         const message = err instanceof Error ? err.message : "Failed to fetch server status.";
         setServerHealth({ status: 'error', message });
       }
@@ -168,17 +178,27 @@ export default function HomePage() {
     setIsLoading(true);
     setError(null);
 
-    const formData = new FormData();
-    formData.append('file', file, file.name);
+    const formDataForUpload = new FormData();
+    formDataForUpload.append('file', file, file.name);
 
     try {
-      const response = await fetch('/api/upload', {
+      const preferredBackendUrl = sessionStorage.getItem('preferredBackendUrl');
+      let uploadApiUrl = '/api/upload';
+
+      if (preferredBackendUrl) {
+        uploadApiUrl = `/api/upload?preferredUrl=${encodeURIComponent(preferredBackendUrl)}`;
+        // console.log('Uploading with preferred backend hint:', preferredBackendUrl);
+      } else {
+        console.log('No preferred backend URL from health check, using default /api/upload endpoint.');
+      }
+
+      const response = await fetch(uploadApiUrl, {
         method: 'POST',
-        body: formData,
+        body: formDataForUpload,
       });
 
       if (!response.ok) {
-        const errorData = await response.json().catch(() => ({ message: 'An error occurred during upload.' }));
+        const errorData = await response.json().catch(() => ({ message: 'An error occurred during upload and failed to parse error response.' }));
         throw new Error(errorData.message || `HTTP error! Status: ${response.status}`);
       }
 
@@ -191,7 +211,7 @@ export default function HomePage() {
       if (err instanceof Error) {
         setError(err.message);
       } else {
-        setError('An unexpected error occurred.');
+        setError('An unexpected error occurred during upload.');
       }
     } finally {
       setIsLoading(false);
