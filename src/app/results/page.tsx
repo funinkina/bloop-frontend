@@ -598,7 +598,7 @@ export default function ResultsPage() {
 
         {/* people animal assignment*/}
         <div className="bg-emerald-50 px-6 rounded-lg shadow-[5px_5px_0px_0px_rgba(0,0,0,0.85)] border-2 border-neutral-800  hover:shadow-[10px_10px_0px_0px_rgba(0,0,0,0.85)] transition duration-150 ease-in-out mb-8">
-          <div className="flex items-center justify-between my-6">
+          <div className="flex items-center justify-between my-4">
             <h2 className="text-xl font-semibold text-gray-700">what kinda animal are you?</h2>
             <Image
               src="/icons/sparkle.svg"
