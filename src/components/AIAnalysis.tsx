@@ -11,10 +11,9 @@ interface AIAnalysisProps {
   people?: Person[];
   summaryOnly?: boolean;
   profilesOnly?: boolean;
-  useSimpleStyles?: boolean; // Add this prop
+  useSimpleStyles?: boolean;
 }
 
-// Function to get animal emoji based on animal type
 const getAnimalEmoji = (animal: string): string => {
   const animalMap: { [key: string]: string } = {
     'owl': '🦉',
@@ -36,7 +35,6 @@ const getAnimalEmoji = (animal: string): string => {
     'sheep': '🐑',
   };
 
-  // Return the emoji if it exists, otherwise return a default
   return animalMap[animal?.toLowerCase()] || '🦄';
 };
 
@@ -47,64 +45,23 @@ const AIAnalysis: React.FC<AIAnalysisProps> = ({
   profilesOnly,
   useSimpleStyles = false
 }) => {
-  // If neither flag is set, show both sections (default behavior)
   const showSummary = profilesOnly !== true;
   const showProfiles = summaryOnly !== true && people && people.length > 0;
 
-  // Define styles conditionally based on useSimpleStyles
-  const containerStyle = useSimpleStyles
-    ? { marginBottom: profilesOnly ? '20px' : '40px' }
-    : {};
-
-  const summaryStyle = useSimpleStyles
-    ? { fontSize: '18px', fontWeight: 500, color: '#553C9A', marginBottom: '20px', lineHeight: '1.5' }
-    : {};
-
-  const profilesGridStyle = useSimpleStyles
-    ? { display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px', marginTop: '16px' }
-    : {};
-
-  const profileCardStyle = useSimpleStyles
-    ? { backgroundColor: '#FFFBEB', padding: '16px', borderRadius: '8px', border: '2px solid #1F2937' }
-    : {};
-
-  const profileHeaderStyle = useSimpleStyles
-    ? { display: 'flex', alignItems: 'center', marginBottom: '8px' }
-    : {};
-
-  const emojiStyle = useSimpleStyles
-    ? { fontSize: '32px', marginRight: '12px' }
-    : {};
-
-  const nameContainerStyle = useSimpleStyles ? { display: 'flex', flexDirection: 'column' as const } : {};
-
-  const nameStyle = useSimpleStyles
-    ? { fontWeight: 'bold', fontSize: '18px', color: '#1A365D' }
-    : {};
-
-  const animalTypeStyle = useSimpleStyles
-    ? { fontSize: '14px', fontStyle: 'italic', color: '#4A5568' }
-    : {};
-
-  const descriptionStyle = useSimpleStyles
-    ? { fontSize: '16px', color: '#1A365D', fontWeight: 500, lineHeight: '1.4' }
-    : {};
-
   return (
-    <div className={!useSimpleStyles ? (profilesOnly ? "mb-8" : "mb-16") : ""} style={useSimpleStyles ? containerStyle : undefined}>
+    <div className={useSimpleStyles ? (profilesOnly ? "mb-5" : "mb-10") : (profilesOnly ? "mb-8" : "mb-16")}>
       {/* Summary Section */}
       {showSummary && (
         summary ? (
           <div>
             <p
-              className={!useSimpleStyles ? "text-purple-900 text-2xl font-medium" : ""}
-              style={useSimpleStyles ? summaryStyle : undefined}
+              className={useSimpleStyles ? "text-3xl font-medium text-purple-900 mb-5" : "text-purple-900 text-2xl font-medium"}
             >
               {summary}
             </p>
           </div>
         ) : (
-          <p className={!useSimpleStyles ? "text-gray-700 italic" : ""} style={useSimpleStyles ? { color: '#4A5568', fontStyle: 'italic' } : undefined}>
+          <p className={useSimpleStyles ? "text-gray-700 italic" : "text-gray-700 italic"}>
             No AI summary available
           </p>
         )
@@ -114,43 +71,36 @@ const AIAnalysis: React.FC<AIAnalysisProps> = ({
       {showProfiles ? (
         <>
           <div
-            className={!useSimpleStyles ? "grid grid-cols-1 md:grid-cols-2 gap-6" : ""}
-            style={useSimpleStyles ? profilesGridStyle : undefined}
+            className={useSimpleStyles ? "grid grid-cols-2 gap-4 mt-4" : "grid grid-cols-1 md:grid-cols-2 gap-6"}
           >
             {people.map((person, index) => (
               <div
                 key={index}
-                className={!useSimpleStyles ? "bg-amber-50 rounded-lg p-4 border-2 border-neutral-800" : ""}
-                style={useSimpleStyles ? profileCardStyle : undefined}
+                className={useSimpleStyles ? "bg-amber-50 p-4 rounded-lg border-2 border-gray-800" : "bg-amber-50 rounded-lg p-4 border-2 border-neutral-800"}
               >
                 <div
-                  className={!useSimpleStyles ? "flex items-center mb-2" : ""}
-                  style={useSimpleStyles ? profileHeaderStyle : undefined}
+                  className="flex items-center mb-2"
                 >
                   <span
-                    className={!useSimpleStyles ? "text-4xl mr-3" : ""}
-                    style={useSimpleStyles ? emojiStyle : undefined}
+                    className={useSimpleStyles ? "text-4xl mr-3" : "text-4xl mr-3"}
                   >
                     {getAnimalEmoji(person.animal)}
                   </span>
-                  <div style={useSimpleStyles ? nameContainerStyle : undefined}>
+                  <div className={useSimpleStyles ? "flex flex-col" : ""}>
                     <h4
-                      className={!useSimpleStyles ? "font-bold text-xl text-blue-950" : ""}
-                      style={useSimpleStyles ? nameStyle : undefined}
+                      className={useSimpleStyles ? "font-bold text-lg text-blue-950" : "font-bold text-xl text-blue-950"}
                     >
                       {person.name}
                     </h4>
                     <p
-                      className={!useSimpleStyles ? "text-sm text-gray-800 italic" : ""}
-                      style={useSimpleStyles ? animalTypeStyle : undefined}
+                      className={useSimpleStyles ? "text-sm italic text-gray-800" : "text-sm text-gray-800 italic"}
                     >
                       The {person.animal.charAt(0).toUpperCase() + person.animal.slice(1)} {people.length > 2 ? 'of the group' : ''}
                     </p>
                   </div>
                 </div>
                 <p
-                  className={!useSimpleStyles ? "text-blue-950 text-lg font-medium" : ""}
-                  style={useSimpleStyles ? descriptionStyle : undefined}
+                  className={useSimpleStyles ? "text-xl text-blue-950 font-medium" : "text-blue-950 text-lg font-medium"}
                 >
                   {person.description}
                 </p>
@@ -159,18 +109,15 @@ const AIAnalysis: React.FC<AIAnalysisProps> = ({
           </div>
         </>
       ) : (
-        // Only show this if we explicitly requested profiles but there aren't any
         profilesOnly && (
           <div
-            className={!useSimpleStyles ? "bg-gray-50 rounded-xl p-6 shadow-[5px_5px_0px_0px_rgba(0,0,0,0.25)] border-2 border-neutral-800" : ""}
-            style={useSimpleStyles ? { backgroundColor: '#F7FAFC', padding: '24px', borderRadius: '12px', border: '2px solid #1F2937', boxShadow: '5px 5px 0px 0px rgba(0,0,0,0.25)' } : undefined}
+            className={useSimpleStyles ? "bg-gray-50 p-6 rounded-xl border-2 border-gray-800 shadow-[5px_5px_0px_0px_rgba(0,0,0,0.25)]" : "bg-gray-50 rounded-xl p-6 shadow-[5px_5px_0px_0px_rgba(0,0,0,0.25)] border-2 border-neutral-800"}
           >
             <p
-              className={!useSimpleStyles ? "text-gray-700 italic" : ""}
-              style={useSimpleStyles ? { color: '#4A5568', fontStyle: 'italic' } : undefined}
+              className={useSimpleStyles ? "text-gray-700 italic" : "text-gray-700 italic"}
             >
               {people && people.length === 0 ?
-                "No personality profiles available - there might be more than 10 users in this chat." :
+                "No personality profiles available - there are more than 15 users in this chat." :
                 "No personality profiles available"}
             </p>
           </div>

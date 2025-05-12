@@ -230,7 +230,8 @@ export default function ResultsPage() {
             return !hasForeignObject;
           }
           return true;
-        }
+        },
+        scale: 2
       };
 
       const dataUrl = await domtoimage.toPng(elementToCapture, options);
@@ -397,7 +398,7 @@ export default function ResultsPage() {
             altText="Peak Hour"
             bgColor="bg-sky-100"
             textColor="text-sky-900"
-            iconWidth={25}
+            iconWidth={48}
             iconHeight={48}
           />
 
@@ -414,7 +415,7 @@ export default function ResultsPage() {
 
           <ChatStatistic
             title="you get the reply back in"
-            value={`~ ${results.stats.average_response_time_minutes.toFixed(2)} minutes`}
+            value={`~ ${results.stats.average_response_time_minutes.toFixed(1)} minutes`}
             icon="time.svg"
             altText="Average Response Time"
             bgColor="bg-red-100"

@@ -21,7 +21,7 @@ interface ShareableResultsProps {
     selectedSections: string[];
 }
 
-const bgColorsShareable = [
+const availableBgColors = [
     'bg-rose-100',
     'bg-green-100',
     'bg-pink-100',
@@ -30,12 +30,12 @@ const bgColorsShareable = [
     'bg-violet-100',
 ];
 
-const getRandomBgColor = () => bgColorsShareable[Math.floor(Math.random() * bgColorsShareable.length)];
+const getRandomBgColor = () => availableBgColors[Math.floor(Math.random() * availableBgColors.length)];
 
-const getShareableCharSize = (count: number, text: string, topWords: { text: string; value: number }[], containerWidth: number) => {
-    const minCharSizeRem = 0.8;
-    const absoluteMaxCharSizeRem = 3.5;
-    const baseFontSizePx = 16;
+const getCharSize = (count: number, text: string, topWords: { text: string; value: number }[], containerWidth: number) => {
+    const minCharSizeRem = 0.9;
+    const absoluteMaxCharSizeRem = 6;
+    const baseFontSizePx = 20;
 
     if (!containerWidth || topWords.length === 0) {
         return `${minCharSizeRem}rem`;
@@ -88,9 +88,8 @@ const ShareableResults = React.forwardRef<HTMLDivElement, ShareableResultsProps>
         return (
             <div
                 ref={ref}
-                className="w-[1200px] bg-amber-50 p-8 box-border font-sans text-gray-900 leading-relaxed"
+                className="w-[1200px] bg-amber-50 p-4 box-border font-sans text-gray-900 leading-relaxed"
             >
-                {/* Branding - always show */}
                 <div className="flex justify-center items-end mb-6 gap-8">
                     <Image src="/bloop_logo.svg" alt="Bloop Logo" width={150} height={150} />
                     <p className="text-xl text-[#232F61] m-0">
@@ -98,7 +97,6 @@ const ShareableResults = React.forwardRef<HTMLDivElement, ShareableResultsProps>
                     </p>
                 </div>
 
-                {/* Title - always show */}
                 <h1 className="text-4xl mb-6 text-gray-800 text-center">
                     {results.chat_name ? (
                         <>Analysis of chats with <strong className="text-[#1A365D]">{results.chat_name}</strong></>
@@ -128,7 +126,7 @@ const ShareableResults = React.forwardRef<HTMLDivElement, ShareableResultsProps>
                             <div className="w-full flex flex-col items-start gap-2 pt-2">
                                 {topWords.length > 0 ? topWords.map(({ text, value }) => {
                                     const wordBgColor = getRandomBgColor();
-                                    const charSize = getShareableCharSize(value, text, topWords, wordCloudContainerWidth);
+                                    const charSize = getCharSize(value, text, topWords, wordCloudContainerWidth);
                                     return (
                                         <div key={text} className="flex items-baseline gap-1" title={`${text}: ${value} uses`}>
                                             <div className="flex gap-1">
@@ -157,7 +155,7 @@ const ShareableResults = React.forwardRef<HTMLDivElement, ShareableResultsProps>
                                 {sortedEmojis.length > 0 ? (
                                     <div className="grid grid-cols-3 grid-rows-2 gap-16 w-full items-center justify-between py-4">
                                         {sortedEmojis.slice(0, 6).map(({ emoji, count }) => (
-                                            <span key={emoji} className={`flex items-center justify-center text-6xl p-2 rounded-md`} title={`${emoji}: ${count}`}>{emoji}</span>
+                                            <span key={emoji} className={`flex items-center justify-center text-8xl p-2 rounded-md`} title={`${emoji}: ${count}`}>{emoji}</span>
                                         ))}
                                     </div>
                                 ) : <p className="text-gray-600 text-center">No common emojis.</p>}

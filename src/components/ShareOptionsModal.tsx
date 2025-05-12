@@ -25,7 +25,7 @@ const ShareOptionsModal: React.FC<ShareOptionsModalProps> = ({
         { id: 'topWordsEmojis', label: 'Top Words and Emojis', defaultChecked: true },
         { id: 'aiAnalysis', label: 'AI Analysis', defaultChecked: true },
         { id: 'animalAssignment', label: 'Animal Assignment', defaultChecked: true },
-        { id: 'overTimeGraph', label: 'Chats over time', defaultChecked: true },
+        { id: 'overTimeGraph', label: 'Chats over time', defaultChecked: false },
     ];
 
     const [selectedOptions, setSelectedOptions] = useState<string[]>(
