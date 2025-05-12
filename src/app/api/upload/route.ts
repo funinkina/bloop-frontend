@@ -45,8 +45,8 @@ export async function POST(request: NextRequest) {
     }
 
     const preferredUrlFromQuery = request.nextUrl.searchParams.get('preferredUrl');
-    const backendUrl1 = process.env['BACKEND_URL-1'] || 'http://localhost:8000';
-    const backendUrl2 = process.env['BACKEND_URL-2'] || 'http://localhost:8000';
+    const backendUrl1 = process.env['BACKEND_URL_1'] || 'http://localhost:8000';
+    const backendUrl2 = process.env['BACKEND_URL_2'] || 'http://localhost:8000';
     const uploadTimeout = 20000;
 
     let primaryUrl: string;

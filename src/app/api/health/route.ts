@@ -44,8 +44,8 @@ async function checkBackendHealth(url: string, timeoutMs: number): Promise<{ res
 }
 
 export async function GET() {
-    const backendUrl1 = process.env['BACKEND_URL-1'] || 'http://localhost:8000';
-    const backendUrl2 = process.env['BACKEND_URL-2'] || 'http://localhost:8000';
+    const backendUrl1 = process.env['BACKEND_URL_1'] || 'http://localhost:8000';
+    const backendUrl2 = process.env['BACKEND_URL_2'] || 'http://localhost:8000';
     const healthCheckTimeout = 3000;
 
     let result = await checkBackendHealth(backendUrl1, healthCheckTimeout);
