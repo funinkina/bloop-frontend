@@ -168,7 +168,7 @@ const ShareableResults = React.forwardRef<HTMLDivElement, ShareableResultsProps>
                 {selectedSections.includes('aiAnalysis') && (
                     <div className="p-4 w-full border-1 border-gray-800 rounded-lg bg-purple-100 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.7)] mb-6">
                         <div className="flex items-center justify-between mb-3">
-                            <h2 className="text-lg font-bold text-gray-800">AI Summary</h2>
+                            <h2 className="text-lg font-bold text-gray-800 w-full">AI Summary</h2>
                             <Image src="/icons/sparkle.svg" alt="AI Analysis" width={28} height={28} className="w-7 h-7" />
                         </div>
                         <AIAnalysis summary={results.ai_analysis?.summary || 'Summary not available.'} people={[]} summaryOnly={true} useSimpleStyles={true} />
@@ -179,7 +179,7 @@ const ShareableResults = React.forwardRef<HTMLDivElement, ShareableResultsProps>
                 {selectedSections.includes('animalAssignment') && (
                     <div className="bg-green-100 p-5 rounded-lg shadow-[4px_4px_0px_0px_rgba(0,0,0,0.7)] border-[1.5px] border-gray-800 mb-6 w-full">
                         <div className="flex items-center justify-between mb-4">
-                            <h2 className="text-lg font-bold text-gray-800">What Kinda Animal Are You?</h2>
+                            <h2 className="text-lg font-bold text-gray-800 w-full">What Kinda Animal Are You?</h2>
                             <Image src="/icons/sparkle.svg" alt="AI Personas" width={28} height={28} className="w-7 h-7" />
                         </div>
                         <AIAnalysis summary="" people={results.ai_analysis?.people || []} profilesOnly={true} useSimpleStyles={true} />
@@ -190,7 +190,7 @@ const ShareableResults = React.forwardRef<HTMLDivElement, ShareableResultsProps>
                 {selectedSections.includes('overTimeGraph') && results.stats.user_monthly_activity && results.stats.user_monthly_activity.length > 0 && (
                     <div className="p-4 border-1 border-gray-800 rounded-lg bg-pink-50 w-full shadow-[4px_4px_0px_0px_rgba(0,0,0,0.7)]">
                         <div className="flex items-center justify-between mb-3">
-                            <h2 className="text-lg font-bold text-gray-800">Monthly Activity</h2>
+                            <h2 className="text-lg font-bold text-gray-800 w-full">Monthly Activity</h2>
                             <Image src="/icons/graph_def.svg" alt="Monthly Activity" width={28} height={28} className="w-7 h-7" />
                         </div>
                         <MonthlyActivity userMonthlyActivity={formattedMonthlyActivity} />

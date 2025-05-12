@@ -83,9 +83,16 @@ const ShareOptionsModal: React.FC<ShareOptionsModalProps> = ({
                     <button
                         onClick={handleConfirm}
                         disabled={selectedOptions.length === 0 || isDownloading}
-                        className="px-4 py-2 bg-orange-300 border-2 border-neutral-800 shadow-[2px_2px_0px_0px_rgba(0,0,0,0.85)] text-blue-950 rounded-lg hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.85)] transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="px-4 py-2 bg-orange-300 flex items-center justify-center border-2 border-neutral-800 shadow-[2px_2px_0px_0px_rgba(0,0,0,0.85)] text-blue-950 rounded-lg hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.85)] transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                        {isDownloading ? 'Generating...' : 'Get it'}
+                        <Image
+                            src='/icons/down_arrow.svg'
+                            alt='download icon'
+                            width={15}
+                            height={15}
+                            className="mr-2"
+                        />
+                        {isDownloading ? 'Generating...' : "yea that'll do!"}
                     </button>
                 </div>
             </div>

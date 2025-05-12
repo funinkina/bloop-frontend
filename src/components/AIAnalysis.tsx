@@ -88,7 +88,7 @@ const AIAnalysis: React.FC<AIAnalysisProps> = ({
                   </span>
                   <div className={useSimpleStyles ? "flex flex-col" : ""}>
                     <h4
-                      className={useSimpleStyles ? "font-bold text-lg text-blue-950" : "font-bold text-xl text-blue-950"}
+                      className={useSimpleStyles ? "font-bold text-lg text-blue-950 w-full leading-none whitespace-nowrap" : "font-bold text-xl text-blue-950 whitespace-nowrap"}
                     >
                       {person.name}
                     </h4>

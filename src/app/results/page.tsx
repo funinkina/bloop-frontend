@@ -690,7 +690,7 @@ export default function ResultsPage() {
 
         {/* user monthly activity */}
         {filteredMonthlyActivity && filteredMonthlyActivity.length > 0 && (
-          <section className="p-4 mb-20 border-2 border-neutral-800 rounded-lg bg-pink-50 shadow-[5px_5px_0px_0px_rgba(0,0,0,0.85)]  hover:shadow-[10px_10px_0px_0px_rgba(0,0,0,0.85)] transition duration-150 ease-in-out"
+          <section className="p-4 mb-10 border-2 border-neutral-800 rounded-lg bg-pink-50 shadow-[5px_5px_0px_0px_rgba(0,0,0,0.85)]  hover:shadow-[10px_10px_0px_0px_rgba(0,0,0,0.85)] transition duration-150 ease-in-out"
             data-exclude-from-download="true">
             <div className='flex items-center justify-between'>
               <h2 className="text-xl font-semibold mb-4 text-gray-700">how your chats have evolved over time?</h2>
@@ -705,6 +705,25 @@ export default function ResultsPage() {
             <MonthlyActivity userMonthlyActivity={filteredMonthlyActivity} />
           </section>
         )}
+
+        <div className="flex justify-center gap-3 items-center">
+          <button
+            onClick={handleShare}
+            disabled={isDownloading}
+            className="mt-4 bg-orange-300 border-2 border-neutral-800 shadow-[5px_5px_0px_0px_rgba(0,0,0,0.85)] hover:shadow-[10px_10px_0px_0px_rgba(0,0,0,0.85)] text-blue-950 px-6 py-4 rounded-xl flex items-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed transition duration-150 ease-in-out md:hidden"
+          >
+            <Image src='/icons/share.svg' width={20} height={20} alt='share icon'></Image>
+            <p className='font-bold'>{isDownloading ? 'Downloading...' : 'Share these results'}</p>
+          </button>
+
+          <button
+            onClick={() => router.push('/')}
+            className="mt-4 font-bold bg-orange-300 border-2 border-neutral-800 shadow-[5px_5px_0px_0px_rgba(0,0,0,0.85)] hover:shadow-[10px_10px_0px_0px_rgba(0,0,0,0.85)] text-blue-950 px-6 py-4 rounded-xl flex items-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed transition duration-150 ease-in-out"
+          >
+            <Image src='/icons/users.svg' height={30} width={30} alt='users' />
+            <p>Analyze someone else!</p>
+          </button>
+        </div>
       </div>
     </main>
   );
