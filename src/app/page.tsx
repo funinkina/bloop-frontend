@@ -298,7 +298,7 @@ export default function HomePage() {
 
         {/* File Upload Box */}
         <div
-          className="w-full max-w-md lg:max-w-lg relative bg-green-200 rounded-md outline-2 outline-neutral-800 p-4 shadow-[7px_7px_0px_0px_rgba(0,0,0,0.85)] hover:shadow-[10px_10px_0px_0px_rgba(0,0,0,0.85)] transition duration-150 ease-in-out"
+          className="w-full max-w-md lg:max-w-lg relative bg-green-200 rounded-md outline-2 outline-neutral-800 p-4 shadow-[7px_7px_0px_0px_rgba(0,0,0,0.85)] hover:shadow-thick-hover transition duration-150 ease-in-out"
           onDragOver={handleDragOver}
           onDrop={handleDrop}
         >
@@ -357,7 +357,7 @@ export default function HomePage() {
             <button
               type="submit"
               disabled={isLoading || !file}
-              className={`w-full px-4 py-2 text-blue-950 font-medium rounded-md outline-2 outline-neutral-800 focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 shadow-[5px_5px_0px_0px_rgba(0,0,0,0.85)]
+              className={`w-full px-4 py-2 text-blue-950 font-medium rounded-md outline-2 outline-neutral-800 focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 shadow-thick-black
                 ${isLoading || !file
                   ? 'bg-amber-50 cursor-not-allowed opacity-70'
                   : 'bg-amber-50 hover:shadow-[7px_7px_0px_0px_rgba(0,0,0,0.85)] hover:cursor-pointer'
@@ -402,7 +402,7 @@ export default function HomePage() {
           {/* Step 1 */}
           <div className="bg-green-100 pt-4 flex flex-col justify-between items-center border-b-2 md:border-b-0 md:border-r-2 border-neutral-800">
             <div className='flex items-center justify-center h-full p-4'>
-              <Image src="/step_1.png" alt="Step 1: Open chat menu" width={150} height={50} className="rounded-md shadow-[5px_5px_0px_0px_rgba(0,0,0,0.85)] max-w-[120px] sm:max-w-[150px] w-full h-auto" />
+              <Image src="/step_1.png" alt="Step 1: Open chat menu" width={150} height={50} className="rounded-md shadow-thick-black max-w-[120px] sm:max-w-[150px] w-full h-auto" />
             </div>
 
             <div className="text-base md:text-lg text-gray-800 text-left bg-amber-50 w-full flex items-center justify-center p-4 sm:p-6 md:min-h-[8rem] border-y-2 border-neutral-800">
@@ -414,7 +414,7 @@ export default function HomePage() {
           {/* Step 2 */}
           <div className="bg-pink-100 pt-4 flex flex-col justify-between items-center border-b-2 md:border-b-0 lg:border-r-2 border-neutral-800">
             <div className='flex items-center justify-center h-full p-4'>
-              <Image src="/step_2.png" alt="Step 2: Tap Export Chat" width={200} height={200} className="rounded-md shadow-[5px_5px_0px_0px_rgba(0,0,0,0.85)] max-w-[180px] sm:max-w-[200px] w-full h-auto" />
+              <Image src="/step_2.png" alt="Step 2: Tap Export Chat" width={200} height={200} className="rounded-md shadow-thick-black max-w-[180px] sm:max-w-[200px] w-full h-auto" />
             </div>
             <div className="text-base md:text-lg text-gray-800 text-center bg-amber-50 w-full flex items-center justify-center p-4 sm:p-6 md:min-h-[8rem] border-y-2 border-neutral-800">
               <h1 className='text-3xl md:text-4xl font-extrabold mr-3 md:mr-4'>2.</h1>
@@ -425,7 +425,7 @@ export default function HomePage() {
           {/* Step 3 */}
           <div className="bg-purple-100 pt-4 flex flex-col justify-between items-center border-b-2 md:border-b-0 md:border-r-2 border-neutral-800">
             <div className='flex items-center justify-center h-full p-4'>
-              <Image src="/step_3.png" alt="Step 3: Choose Without Media" width={400} height={200} className="rounded-3xl shadow-[5px_5px_0px_0px_rgba(0,0,0,0.85)] max-w-[280px] sm:max-w-[350px] lg:max-w-[400px] w-full h-auto" />
+              <Image src="/step_3.png" alt="Step 3: Choose Without Media" width={400} height={200} className="rounded-4xl shadow-thick-black max-w-[280px] sm:max-w-[350px] lg:max-w-[400px] w-full h-auto" />
             </div>
             <div className="text-base md:text-lg text-gray-800 text-center bg-amber-50 w-full flex items-center justify-center p-4 sm:p-6 md:min-h-[8rem] border-y-2 border-neutral-800">
               <h1 className='text-3xl md:text-4xl font-extrabold mr-3 md:mr-4'>3.</h1>
@@ -436,7 +436,7 @@ export default function HomePage() {
           {/* Step 4 */}
           <div className="bg-blue-100 pt-4 flex flex-col justify-between items-center">
             <div className='flex items-center justify-center h-full p-4'>
-              <Image src="/step_4.png" alt="Step 4: Save the file" width={400} height={200} className="rounded-md shadow-[5px_5px_0px_0px_rgba(0,0,0,0.85)] max-w-[280px] sm:max-w-[350px] lg:max-w-[400px] w-full h-auto" />
+              <Image src="/step_4.png" alt="Step 4: Save the file" width={400} height={200} className="rounded-md shadow-thick-black max-w-[280px] sm:max-w-[350px] lg:max-w-[400px] w-full h-auto" />
             </div>
             <div className="text-base md:text-lg text-gray-800 text-center bg-amber-50 w-full flex items-center justify-center p-4 sm:p-6 md:min-h-[8rem] border-y-2 border-neutral-800">
               <h1 className='text-3xl md:text-4xl font-extrabold mr-3 md:mr-4'>4.</h1>

@@ -264,7 +264,7 @@ export default function ResultsPage() {
           <p className="text-lg text-orange-800">{error}</p>
           <button
             onClick={() => router.push('/')}
-            className="mt-4 bg-orange-300 border-2 border-neutral-800 shadow-[5px_5px_0px_0px_rgba(0,0,0,0.85)] hover:shadow-[10px_10px_0px_0px_rgba(0,0,0,0.85)] text-blue-950 px-6 py-4 rounded-xl gap-3 transition duration-150 ease-in-out"
+            className="mt-4 bg-orange-300 border-2 border-neutral-800 shadow-thick-black hover:shadow-thick-hover text-blue-950 px-6 py-4 rounded-xl gap-3 transition duration-150 ease-in-out"
           >
             Go to Upload
           </button>
@@ -339,7 +339,7 @@ export default function ResultsPage() {
         <button
           onClick={handleShare}
           disabled={isDownloading}
-          className="mt-4 md:mt-0 bg-orange-300 border-2 border-neutral-800 shadow-[5px_5px_0px_0px_rgba(0,0,0,0.85)] hover:shadow-[10px_10px_0px_0px_rgba(0,0,0,0.85)] text-blue-950 px-6 py-4 rounded-xl flex items-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed self-center md:self-end transition duration-150 ease-in-out"
+          className="mt-4 md:mt-0 bg-orange-300 border-2 border-neutral-800 shadow-thick-black hover:shadow-thick-hover text-blue-950 px-6 py-4 rounded-xl flex items-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed self-center md:self-end transition duration-150 ease-in-out"
         >
           <Image src='/icons/share.svg' width={20} height={20} alt='share icon'></Image>
           <p className='font-bold'>{isDownloading ? 'Downloading...' : 'Share these results'}</p>
@@ -427,7 +427,7 @@ export default function ResultsPage() {
 
         {/* top words and emojis */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-          <section className="p-4 border-2 border-neutral-800 rounded-lg bg-zinc-50 shadow-[5px_5px_0px_0px_rgba(0,0,0,0.85)] hover:shadow-[10px_10px_0px_0px_rgba(0,0,0,0.85)] transition duration-150 ease-in-out">
+          <section className="p-4 border-2 border-neutral-800 rounded-lg bg-zinc-50 shadow-thick-black hover:shadow-thick-hover transition duration-150 ease-in-out">
             <div className='flex items-center justify-between'>
               <h2 className="text-xl font-bold mb-4 text-gray-700">you guys use these {topWords.length} words a lot</h2>
               <Image
@@ -498,7 +498,7 @@ export default function ResultsPage() {
             </div>
           </section>
 
-          <section className="p-4 lg:h-full md:h-fit  border-2 border-neutral-800 rounded-lg bg-zinc-50 shadow-[5px_5px_0px_0px_rgba(0,0,0,0.85)]  hover:shadow-[10px_10px_0px_0px_rgba(0,0,0,0.85)] transition duration-150 ease-in-out">
+          <section className="p-4 lg:h-full md:h-fit  border-2 border-neutral-800 rounded-lg bg-zinc-50 shadow-thick-black  hover:shadow-thick-hover transition duration-150 ease-in-out">
             <div className='flex items-center justify-between'>
               <h2 className="text-xl font-semibold mb-4 text-gray-700">can&apos;t get enough of these emojis</h2>
               <Image
@@ -531,7 +531,7 @@ export default function ResultsPage() {
 
         {/* ai analysis, weekday/weekend, interaction matrix */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-          <section className="p-4 border-2 border-neutral-800 rounded-lg bg-purple-50 shadow-[5px_5px_0px_0px_rgba(0,0,0,0.85)]  hover:shadow-[10px_10px_0px_0px_rgba(0,0,0,0.85)] transition duration-150 ease-in-out">
+          <section className="p-4 border-2 border-neutral-800 rounded-lg bg-purple-50 shadow-thick-black  hover:shadow-thick-hover transition duration-150 ease-in-out">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-xl font-semibold text-gray-700">wtf was all the yapping about?</h2>
               <Image
@@ -550,7 +550,7 @@ export default function ResultsPage() {
           </section>
 
           {results.stats.most_active_users_pct && Object.keys(results.stats.most_active_users_pct).length <= 2 && (
-            <section className="p-4 border-2 border-neutral-800 rounded-lg bg-sky-100 shadow-[5px_5px_0px_0px_rgba(0,0,0,0.85)]  hover:shadow-[10px_10px_0px_0px_rgba(0,0,0,0.85)] transition duration-150 ease-in-out">
+            <section className="p-4 border-2 border-neutral-800 rounded-lg bg-sky-100 shadow-thick-black  hover:shadow-thick-hover transition duration-150 ease-in-out">
               <div className='flex items-center justify-between mb-4'>
                 <h2 className="text-xl font-semibold mb-4 text-gray-700">banter on weekday or relaxing on weekend?</h2>
                 <Image
@@ -583,7 +583,7 @@ export default function ResultsPage() {
           )}
 
           {results.stats.user_interaction_matrix && chordKeys.length > 2 && chordMatrix.length > 2 && (
-            <section className="pt-4 pr-4 pl-4 border-2 border-neutral-800 rounded-lg bg-lime-50 shadow-[5px_5px_0px_0px_rgba(0,0,0,0.85)] hover:shadow-[10px_10px_0px_0px_rgba(0,0,0,0.85)] transition duration-150 ease-in-out">
+            <section className="pt-4 pr-4 pl-4 border-2 border-neutral-800 rounded-lg bg-lime-50 shadow-thick-black hover:shadow-thick-hover transition duration-150 ease-in-out">
               <div className='flex items-center justify-between mb-4'>
                 <h2 className="text-xl font-semibold mb-4 text-gray-700">you guys are really chaotic huh?</h2>
                 <Image
@@ -618,7 +618,7 @@ export default function ResultsPage() {
         </div>
 
         {/* people animal assignment*/}
-        <div className="bg-emerald-50 px-6 rounded-lg shadow-[5px_5px_0px_0px_rgba(0,0,0,0.85)] border-2 border-neutral-800  hover:shadow-[10px_10px_0px_0px_rgba(0,0,0,0.85)] transition duration-150 ease-in-out mb-8">
+        <div className="bg-emerald-50 px-6 rounded-lg shadow-thick-black border-2 border-neutral-800  hover:shadow-thick-hover transition duration-150 ease-in-out mb-8">
           <div className="flex items-center justify-between my-4">
             <h2 className="text-xl font-semibold text-gray-700">what kinda animal are you?</h2>
             <Image
@@ -639,7 +639,7 @@ export default function ResultsPage() {
         {/* top yappers and first texters */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
           <section
-            className="p-4 border-2 border-neutral-800 rounded-lg bg-sky-50 shadow-[5px_5px_0px_0px_rgba(0,0,0,0.85)] hover:shadow-[10px_10px_0px_0px_rgba(0,0,0,0.85)] transition duration-150 ease-in-out"
+            className="p-4 border-2 border-neutral-800 rounded-lg bg-sky-50 shadow-thick-black hover:shadow-thick-hover transition duration-150 ease-in-out"
             data-exclude-from-download="true"
           >
             <div className='flex items-center justify-between'>
@@ -674,7 +674,7 @@ export default function ResultsPage() {
           </section>
 
           <section
-            className="p-4 border-2 border-neutral-800 rounded-lg bg-sky-50 shadow-[5px_5px_0px_0px_rgba(0,0,0,0.85)] hover:shadow-[10px_10px_0px_0px_rgba(0,0,0,0.85)] transition duration-150 ease-in-out"
+            className="p-4 border-2 border-neutral-800 rounded-lg bg-sky-50 shadow-thick-black hover:shadow-thick-hover transition duration-150 ease-in-out"
             data-exclude-from-download="true"
           >
             <div className='flex items-center justify-between'>
@@ -711,7 +711,7 @@ export default function ResultsPage() {
 
         {/* user monthly activity */}
         {filteredMonthlyActivity && filteredMonthlyActivity.length > 0 && (
-          <section className="p-4 mb-10 border-2 border-neutral-800 rounded-lg bg-pink-50 shadow-[5px_5px_0px_0px_rgba(0,0,0,0.85)]  hover:shadow-[10px_10px_0px_0px_rgba(0,0,0,0.85)] transition duration-150 ease-in-out"
+          <section className="p-4 mb-10 border-2 border-neutral-800 rounded-lg bg-pink-50 shadow-thick-black  hover:shadow-thick-hover transition duration-150 ease-in-out"
             data-exclude-from-download="true">
             <div className='flex items-center justify-between'>
               <h2 className="text-xl font-semibold mb-4 text-gray-700">how your chats have evolved over time?</h2>
@@ -731,7 +731,7 @@ export default function ResultsPage() {
           <button
             onClick={handleShare}
             disabled={isDownloading}
-            className="mt-4 bg-orange-300 border-2 border-neutral-800 shadow-[5px_5px_0px_0px_rgba(0,0,0,0.85)] hover:shadow-[10px_10px_0px_0px_rgba(0,0,0,0.85)] text-blue-950 px-6 py-4 rounded-xl flex items-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed transition duration-150 ease-in-out md:hidden"
+            className="mt-4 bg-orange-300 border-2 border-neutral-800 shadow-thick-black hover:shadow-thick-hover text-blue-950 px-6 py-4 rounded-xl flex items-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed transition duration-150 ease-in-out md:hidden"
           >
             <Image src='/icons/share.svg' width={20} height={20} alt='share icon'></Image>
             <p className='font-bold'>{isDownloading ? 'Downloading...' : 'Share these results'}</p>
@@ -739,7 +739,7 @@ export default function ResultsPage() {
 
           <button
             onClick={() => router.push('/')}
-            className="mt-4 font-bold bg-orange-300 border-2 border-neutral-800 shadow-[5px_5px_0px_0px_rgba(0,0,0,0.85)] hover:shadow-[10px_10px_0px_0px_rgba(0,0,0,0.85)] text-blue-950 px-6 py-4 rounded-xl flex items-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed transition duration-150 ease-in-out"
+            className="mt-4 font-bold bg-orange-300 border-2 border-neutral-800 shadow-thick-black hover:shadow-thick-hover text-blue-950 px-6 py-4 rounded-xl flex items-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed transition duration-150 ease-in-out"
           >
             <Image src='/icons/users.svg' height={30} width={30} alt='users' />
             <p>Analyze someone else!</p>

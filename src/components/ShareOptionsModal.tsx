@@ -48,7 +48,7 @@ const ShareOptionsModal: React.FC<ShareOptionsModalProps> = ({
 
     return (
         <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50">
-            <div className="bg-amber-50 rounded-xl p-6 mx-10 max-w-md w-full border-2 border-neutral-800 shadow-[5px_5px_0px_0px_rgba(0,0,0,0.85)]">
+            <div className="bg-amber-50 rounded-xl p-6 mx-10 max-w-md w-full border-2 border-neutral-800 shadow-thick-black">
                 <div className="flex justify-between items-center mb-6">
                     <h2 className="text-xl font-bold text-blue-950">what do you want to share?</h2>
                     <button

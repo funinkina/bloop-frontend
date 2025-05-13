@@ -51,6 +51,9 @@
       transform: scale(1) rotate(0deg);
     }
   }
+
+  --shadow-thick-black: 5px 5px 0px 0px rgba(0, 0, 0, 0.85);
+  --shadow-thick-hover: 10px 10px 0px 0px rgba(0, 0, 0, 0.85);
 }
 
 @media (prefers-color-scheme: dark) {
