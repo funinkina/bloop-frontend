@@ -13,16 +13,42 @@
 
 @theme {
   --animate-float: float 2s ease-in-out infinite;
-  
+
   @keyframes float {
     0% {
       transform: translate(0, 0);
     }
+
     50% {
       transform: translate(-10px, -10px);
     }
+
     100% {
       transform: translate(0, 0);
+    }
+  }
+
+  --animate-scale-rotate: scale-rotate 1s ease-in-out infinite both;
+
+  @keyframes scale-rotate {
+    0% {
+      transform: scale(1) rotate(0deg);
+    }
+
+    25% {
+      transform: scale(1.4) rotate(10deg);
+    }
+
+    50% {
+      transform: scale(1.2);
+    }
+
+    75% {
+      transform: scale(1.4) rotate(-20deg);
+    }
+
+    100% {
+      transform: scale(1) rotate(0deg);
     }
   }
 }
@@ -40,5 +66,6 @@ body {
 }
 
 .hidden-for-download {
-  display: none !important; /* Use !important to ensure override */
+  display: none !important;
+  /* Use !important to ensure override */
 }

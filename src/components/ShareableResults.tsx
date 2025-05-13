@@ -86,32 +86,24 @@ const ShareableResults = React.forwardRef<HTMLDivElement, ShareableResultsProps>
         }));
 
         return (
-            <div
-                ref={ref}
-                className="w-[1200px] bg-amber-50 p-4 box-border font-sans text-gray-900 leading-relaxed"
-            >
-                <div className="flex justify-center items-end mb-6 gap-8">
-                    <Image src="/bloop_logo.svg" alt="Bloop Logo" width={150} height={150} />
-                    <p className="text-xl text-[#232F61] m-0">
-                        generate your own at <strong>bloopit.vercel.app</strong>
-                    </p>
-                </div>
+            <div ref={ref} className="w-[1200px] bg-amber-50 p-4 box-border font-sans text-gray-900 leading-relaxed flex flex-col items-center justify-center">
+                <Image src="/bloop_logo.svg" alt="Bloop Logo" width={200} height={150} />
 
-                <h1 className="text-4xl mb-6 text-gray-800 text-center">
+                <h1 className="text-3xl mb-6 text-gray-800 text-center">
                     {results.chat_name ? (
-                        <>Analysis of chats with <strong className="text-[#1A365D]">{results.chat_name}</strong></>
-                    ) : "Analysis Results"}
+                        <p>these chats be fire between <strong className="text-[#1A365D]">{results.chat_name}</strong></p>
+                    ) : "damn thats a lot of messages!"}
                 </h1>
 
                 {/* Stats Grid */}
                 {selectedSections.includes('chatStatistics') && (
-                    <div className="grid grid-cols-3 gap-4 mb-6">
+                    <div className="grid grid-cols-3 gap-4 mb-6 w-full px-2">
                         <ChatStatistic title="you guys have sent" value={`${results.stats.total_messages.toLocaleString()} messages`} icon="chat.svg" altText="Total Messages" bgColor="bg-purple-100" textColor="text-violet-800" />
                         <ChatStatistic title="you've been chatting for" value={`${results.stats.days_active ?? 'N/A'} ${results.stats.days_active === 1 ? 'day' : 'days'}`} icon="calendar.svg" altText="Days Active" bgColor="bg-green-100" textColor="text-green-800" />
                         <ChatStatistic title="who gets ghosted the most?" value={formatMostIgnored(results.stats.most_ignored_users_pct)} icon="frown.svg" altText="Most Ignored" bgColor="bg-sky-100" textColor="text-sky-800" />
-                        <ChatStatistic title="peak convos at?" value={formatPeakHour(results.stats.peak_hour)} icon="peak.svg" altText="Peak Hour" bgColor="bg-sky-100" textColor="text-sky-900" />
-                        <ChatStatistic title="who texts first usually?" value={formatFirstTextChampion(results.stats.first_text_champion)} icon="trophy.svg" altText="First Texter" bgColor="bg-violet-100" textColor="text-violet-800" />
-                        <ChatStatistic title="you get the reply back in" value={`~${results.stats.average_response_time_minutes.toFixed(1)} mins`} icon="time.svg" altText="Avg Response Time" bgColor="bg-rose-100" textColor="text-rose-800" />
+                        <ChatStatistic title="peak convos at?" value={formatPeakHour(results.stats.peak_hour)} icon="peak.svg" altText="Peak Hour" bgColor="bg-sky-100" textColor="text-sky-900" iconWidth={50} iconHeight={50} />
+                        <ChatStatistic title="who texts first usually?" value={formatFirstTextChampion(results.stats.first_text_champion)} icon="trophy.svg" altText="First Texter" bgColor="bg-violet-100" textColor="text-violet-800" iconHeight={50} iconWidth={50} />
+                        <ChatStatistic title="you get the reply back in" value={`~${results.stats.average_response_time_minutes.toFixed(1)} mins`} icon="time.svg" altText="Avg Response Time" bgColor="bg-rose-100" textColor="text-orange-700" iconWidth={30} iconHeight={30} />
                     </div>
                 )}
 
@@ -196,7 +188,9 @@ const ShareableResults = React.forwardRef<HTMLDivElement, ShareableResultsProps>
                         <MonthlyActivity userMonthlyActivity={formattedMonthlyActivity} />
                     </div>
                 )}
-
+                <p className="text-2xl text-blue-950 my-4">
+                    generate your own at <strong>bloopit.vercel.app</strong>
+                </p>
             </div>
         );
     }

@@ -66,7 +66,7 @@ const ShareOptionsModal: React.FC<ShareOptionsModalProps> = ({
                                 type="checkbox"
                                 checked={selectedOptions.includes(option.id)}
                                 onChange={() => handleOptionChange(option.id)}
-                                className="form-checkbox h-5 w-5 text-orange-400 rounded border-gray-300 focus:ring-orange-500"
+                                className="form-checkbox h-5 w-5 rounded-lg text-orange-400 border-gray-300 focus:ring-orange-500"
                             />
                             <span className="text-neutral-800 font-medium">{option.label}</span>
                         </label>
@@ -92,7 +92,7 @@ const ShareOptionsModal: React.FC<ShareOptionsModalProps> = ({
                             height={15}
                             className="mr-2"
                         />
-                        {isDownloading ? 'Generating...' : "yea that'll do!"}
+                        {isDownloading ? 'hold on...' : "yea that'll do!"}
                     </button>
                 </div>
             </div>

@@ -452,13 +452,34 @@ export default function ResultsPage() {
                           return (
                             <span
                               key={`${text}-${index}`}
-                              className={`flex items-center justify-center rounded font-bold text-gray-800 ${bgColor}`}
+                              className={`flex items-center justify-center rounded font-bold text-gray-800 ${bgColor} transform ease-in-out duration-200`}
                               style={{
                                 fontSize: charSizeStyle,
                                 width: `calc(${charSizeStyle} + 0.5rem)`,
                                 height: `calc(${charSizeStyle} + 0.5rem)`,
-                                lineHeight: '1'
+                                lineHeight: '1',
                               }}
+                              onMouseEnter={() => {
+                                const siblings = wordContainerRef.current?.querySelectorAll(`span[data-word="${text}"]`);
+                                siblings?.forEach((sibling, siblingIndex) => {
+                                  if (siblingIndex === index) {
+                                    (sibling as HTMLElement).style.transform = 'scale(1.3)';
+                                  } else if (siblingIndex === index - 1 || siblingIndex === index + 1) {
+                                    (sibling as HTMLElement).style.transform = 'scale(1.2)';
+                                  } else if (siblingIndex === index - 2 || siblingIndex === index + 2) {
+                                    (sibling as HTMLElement).style.transform = 'scale(1.1)';
+                                  } else {
+                                    (sibling as HTMLElement).style.transform = 'scale(1)';
+                                  }
+                                });
+                              }}
+                              onMouseLeave={() => {
+                                const siblings = wordContainerRef.current?.querySelectorAll(`span[data-word="${text}"]`);
+                                siblings?.forEach((sibling) => {
+                                  (sibling as HTMLElement).style.transform = 'scale(1)';
+                                });
+                              }}
+                              data-word={text}
                             >
                               {char}
                             </span>
@@ -494,7 +515,7 @@ export default function ResultsPage() {
                   {sortedEmojis.slice(0, 6).map(({ emoji, count }) => (
                     <span
                       key={emoji}
-                      className="flex items-center justify-center text-6xl md:text-8xl"
+                      className="flex items-center justify-center text-6xl md:text-8xl hover:scale-120 transition-transform duration-200 ease-in-out"
                       title={`${emoji}: ${count}`}
                     >
                       {emoji}

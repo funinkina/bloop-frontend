@@ -70,9 +70,9 @@ const AIAnalysis: React.FC<AIAnalysisProps> = ({
         <>
           <div className={useSimpleStyles ? "grid grid-cols-2 gap-4 mt-4" : "grid grid-cols-1 md:grid-cols-2 gap-6"}>
             {people.map((person, index) => (
-              <div key={index} className={useSimpleStyles ? "bg-amber-50 p-4 rounded-lg border-2 border-gray-800" : "bg-amber-50 rounded-lg p-4 border-2 border-neutral-800"}>
+              <div key={index} className={`${useSimpleStyles ? "bg-amber-50 p-4 rounded-lg border-2 border-gray-800" : "bg-amber-50 rounded-lg p-4 border-2 border-neutral-800"} group`}>
                 <div className="flex items-center mb-2">
-                  <span className={useSimpleStyles ? "text-4xl mr-3" : "text-4xl mr-3"}>
+                  <span className={`${useSimpleStyles ? "text-4xl mr-3" : "text-4xl mr-3"} group-hover:animate-scale-rotate`}>
                     {getAnimalEmoji(person.animal)}
                   </span>
                   <div className={useSimpleStyles ? "flex flex-col" : ""}>
