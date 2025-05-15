@@ -33,7 +33,7 @@ const ChatStatistic = ({
             />
             <div>
                 <h2 className="text-xl font-semibold mb-1 text-gray-700">{title}</h2>
-                <p className={`text-2xl font-bold ${textColor}`}>{value}</p>
+                <p className={`text-2xl font-bold leading-1.5 w-full ${textColor}`}>{value}</p>
             </div>
         </section>
     );
